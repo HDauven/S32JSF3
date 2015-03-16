@@ -56,6 +56,7 @@ public class JSF31KochFractalFX extends Application {
     private final int kpWidth = 500;
     private final int kpHeight = 500;
     
+    private KochFractal fractal;
     @Override
     public void start(Stage primaryStage) {
        
@@ -95,6 +96,7 @@ public class JSF31KochFractalFX extends Application {
         // Label to present current level of Koch fractal
         labelLevel = new Label("Level: " + currentLevel);
         grid.add(labelLevel, 0, 6);
+        
         
         // Button to increase level of Koch fractal
         Button buttonIncreaseLevel = new Button();
