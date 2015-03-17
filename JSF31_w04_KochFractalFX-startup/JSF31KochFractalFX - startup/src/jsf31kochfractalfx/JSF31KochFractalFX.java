@@ -56,7 +56,6 @@ public class JSF31KochFractalFX extends Application {
     private final int kpWidth = 500;
     private final int kpHeight = 500;
     
-    private KochFractal fractal;
     @Override
     public void start(Stage primaryStage) {
        
