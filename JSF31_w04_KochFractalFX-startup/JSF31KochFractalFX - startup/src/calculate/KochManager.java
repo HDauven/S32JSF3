@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import jsf31kochfractalfx.JSF31KochFractalFX;
+import timeutil.TimeStamp;
 
 /**
  *
@@ -18,12 +19,14 @@ public class KochManager implements Observer {
 private JSF31KochFractalFX application;
 private KochFractal koch;
 private ArrayList<Edge> edges;
+private TimeStamp ts;
 
 public KochManager(JSF31KochFractalFX application) {
     this.application = application;
     koch = new KochFractal();
     koch.addObserver(this);
     edges = new ArrayList<>();
+    ts = new TimeStamp();
 }
 
 public void changeLevel(int nxt) {
@@ -32,6 +35,7 @@ public void changeLevel(int nxt) {
 }
 
 public void drawEdges() {
+    ts.setBegin("Begin drawEdges()");
     application.clearKochPanel();
     koch.generateLeftEdge();
     koch.generateBottomEdge();
@@ -40,10 +44,14 @@ public void drawEdges() {
     {
         application.drawEdge(e);
     }
+    ts.setEnd("End drawEdges()");
+    application.setTextCalc(ts.toString());
+    Integer nrOfEdges = koch.getNrOfEdges();
+    application.setTextNrEdges(nrOfEdges.toString());
 }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) {      
         edges.add((Edge)arg);
     }
 
