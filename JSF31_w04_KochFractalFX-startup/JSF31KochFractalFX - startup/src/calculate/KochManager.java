@@ -36,6 +36,8 @@ public KochManager(JSF31KochFractalFX application) {
 public void changeLevel(int nxt) {
     koch.setLevel(nxt);
     
+    edges.clear();
+    
     tsCalc.init();
     tsCalc.setBegin("Begin Calculate");
     koch.generateLeftEdge();
@@ -56,6 +58,7 @@ public void drawEdges() {
     {
         application.drawEdge(e);
     }
+    
     tsDraw.setEnd("End Drawing");
     application.setTextDraw(tsDraw.toString());
     
