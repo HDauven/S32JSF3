@@ -17,11 +17,11 @@ import timeutil.TimeStamp;
  */
 public class KochManager implements Observer {
 private JSF31KochFractalFX application;
-private KochFractal koch;
-private ArrayList<Edge> edges;
-private ArrayList<String> timesAndEdges;
-private TimeStamp tsCalc;
-private TimeStamp tsDraw;
+private KochFractal koch;                   //De KochFractal.
+private ArrayList<Edge> edges;              //ArrayList met alle edges.
+private ArrayList<String> timesAndEdges;    //ArrayList met de edges en tijd.
+private TimeStamp tsCalc;                   //TimeStamp voor het berekenen van de edges.
+private TimeStamp tsDraw;                   //TimeStamp voor het tekenen van de edges.
 
 public KochManager(JSF31KochFractalFX application) {
     this.application = application;
@@ -35,9 +35,9 @@ public KochManager(JSF31KochFractalFX application) {
 
 public void changeLevel(int nxt) {
     koch.setLevel(nxt);
-    
     edges.clear();
     
+    //Start de TimeStamp vóór het genereren van de edges en stop daarna.
     tsCalc.init();
     tsCalc.setBegin("Begin Calculate");
     koch.generateLeftEdge();
@@ -52,9 +52,10 @@ public void changeLevel(int nxt) {
 public void drawEdges() {
     application.clearKochPanel();
     
+    //Start de TimeStamp vóór het tekenen van de edges en stop daarna.
     tsDraw.init();
     tsDraw.setBegin("Begin Drawing");
-    for (Edge e : edges)
+    for (Edge e : edges) //Loop door de ArrayList van edges en teken deze.
     {
         application.drawEdge(e);
     }
@@ -62,16 +63,16 @@ public void drawEdges() {
     tsDraw.setEnd("End Drawing");
     application.setTextDraw(tsDraw.toString());
     
-    Integer nrOfEdges = koch.getNrOfEdges();
-    application.setTextNrEdges(nrOfEdges.toString());
-    
+    Integer nrOfEdges = koch.getNrOfEdges();          //Haal het aantal edges op en sla deze op in nrOfEdges.
+    application.setTextNrEdges(nrOfEdges.toString()); //Converteer nrOfEdges naar een String
+                                                      //zodat deze gebruikt kan worden in setTextNrEdges.
     timesAndEdges.add(tsDraw.toString());
     timesAndEdges.add(nrOfEdges.toString());
 }
 
     @Override
     public void update(Observable o, Object arg) {
-        edges.add((Edge)arg);
+        edges.add((Edge)arg); //Voeg de edge toe aan de ArrayList.
     }
 
 }
