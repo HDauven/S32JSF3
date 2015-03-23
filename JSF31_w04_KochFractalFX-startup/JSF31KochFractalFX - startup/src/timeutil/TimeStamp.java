@@ -142,7 +142,7 @@ public class TimeStamp {
      * override van toString methode. Geeft alle tijdsperiode weer.
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         for (Period p : this.list) {
             buffer.append(p.toString());
