@@ -101,16 +101,20 @@ public class KochManager {
             }
         });
 
-        t1.start();
-        t2.start();
-        t3.start();
+        
+        
+        
 
         try {
+            t1.start();
             t1.join();
+            t2.start();
             t2.join();
+            t3.start();
             t3.join();
-
+            
             application.requestDrawEdges();
+            
         } catch (InterruptedException ex) {
 
         }
@@ -132,7 +136,7 @@ public class KochManager {
         tsDraw.setEnd("End Drawing");
         application.setTextDraw(tsDraw.toString());
 
-        Integer nrOfEdges = koch1.getNrOfEdges() + koch2.getNrOfEdges() + koch3.getNrOfEdges();          //Haal het aantal edges op en sla deze op in nrOfEdges.
+        Integer nrOfEdges = koch1.getNrOfEdges();         //Haal het aantal edges op en sla deze op in nrOfEdges.
         application.setTextNrEdges(nrOfEdges.toString()); //Converteer nrOfEdges naar een String
         //zodat deze gebruikt kan worden in setTextNrEdges.
         timesAndEdges.add(tsDraw.toString());
