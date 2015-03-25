@@ -5,18 +5,26 @@
  */
 package jsf31kochfractalfx;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  *
  * @author Jelle
  */
-public class EdgesRunnable implements Runnable {
+public class EdgesRunnable implements Runnable, Observer {
     
     public EdgesRunnable() {
-        
+
     }
     
     @Override
     public void run() {
+        
+    }
+    
+    @Override
+    public void update(Observable o, Object arg){
         
     }
 }
