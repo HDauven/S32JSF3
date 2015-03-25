@@ -60,7 +60,7 @@ public class KochManager {
                 koch1.addObserver(this);
                 koch1.setLevel(help);
                 koch1.generateLeftEdge();
-                increaseCount();  
+                increaseCount();
             }
 
             @Override
