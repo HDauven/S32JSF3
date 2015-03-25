@@ -18,7 +18,9 @@ import timeutil.TimeStamp;
 public class KochManager {
 
     private JSF31KochFractalFX application;
-    private KochFractal koch;                   //De KochFractal.
+    private KochFractal koch1;                   //De KochFractal.
+    private KochFractal koch2;                   //De KochFractal.
+    private KochFractal koch3;                   //De KochFractal.    
     private ArrayList<Edge> edges;              //ArrayList met alle edges.
     private ArrayList<String> timesAndEdges;    //ArrayList met de edges en tijd.
     private TimeStamp tsCalc;                   //TimeStamp voor het berekenen van de edges.
@@ -28,9 +30,11 @@ public class KochManager {
 
     public KochManager(JSF31KochFractalFX application) {
         this.application = application;
-        koch = new KochFractal();
+        koch1 = new KochFractal();
+        koch2 = new KochFractal();
+        koch3 = new KochFractal();
         Runnable = new EdgesRunnable();
-        koch.addObserver(Runnable);
+        //koch.addObserver(Runnable);
         edges = new ArrayList<>();
         tsCalc = new TimeStamp();
         tsDraw = new TimeStamp();
@@ -42,7 +46,8 @@ public class KochManager {
     }
 
     public void changeLevel(int nxt) {
-        koch.setLevel(nxt);
+        //koch.setLevel(nxt);
+        final int help = nxt;
         edges.clear();
 
         //Start de TimeStamp vóór het genereren van de edges en stop daarna.
@@ -52,8 +57,9 @@ public class KochManager {
 
             @Override
             public void run() {
-                KochFractal koch = new KochFractal();
-                koch.generateLeftEdge();
+                koch1.addObserver(this);
+                koch1.setLevel(help);
+                koch1.generateLeftEdge();
                 increaseCount();  
             }
 
@@ -61,15 +67,15 @@ public class KochManager {
             public synchronized void update(Observable o, Object arg) {
                 edges.add((Edge) arg);
             }
-
         });
 
         Thread t2 = new Thread(new EdgesRunnable() {
 
             @Override
             public void run() {
-                KochFractal koch = new KochFractal();
-                koch.generateBottomEdge();
+                koch2.addObserver(this);
+                koch2.setLevel(help);
+                koch2.generateBottomEdge();
                 increaseCount();
             }
 
@@ -83,8 +89,9 @@ public class KochManager {
 
             @Override
             public void run() {
-                KochFractal koch = new KochFractal();
-                koch.generateRightEdge();
+                koch3.addObserver(this);
+                koch3.setLevel(help);
+                koch3.generateRightEdge();
                 increaseCount();
             }
 
@@ -125,7 +132,7 @@ public class KochManager {
         tsDraw.setEnd("End Drawing");
         application.setTextDraw(tsDraw.toString());
 
-        Integer nrOfEdges = koch.getNrOfEdges();          //Haal het aantal edges op en sla deze op in nrOfEdges.
+        Integer nrOfEdges = koch1.getNrOfEdges() + koch2.getNrOfEdges() + koch3.getNrOfEdges();          //Haal het aantal edges op en sla deze op in nrOfEdges.
         application.setTextNrEdges(nrOfEdges.toString()); //Converteer nrOfEdges naar een String
         //zodat deze gebruikt kan worden in setTextNrEdges.
         timesAndEdges.add(tsDraw.toString());
