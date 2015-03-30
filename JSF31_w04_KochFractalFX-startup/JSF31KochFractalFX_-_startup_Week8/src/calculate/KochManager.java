@@ -133,13 +133,10 @@ public class KochManager {
         //Start de TimeStamp vóór het tekenen van de edges en stop daarna.
         tsDraw.init();
         tsDraw.setBegin("Begin Drawing");
-        synchronized (edges) {
-            for (Edge e : edges) //Loop door de ArrayList van edges en teken deze.
-            {
-                application.drawEdge(e);
-            }
+        for (Edge e : edges) //Loop door de ArrayList van edges en teken deze.
+        {
+            application.drawEdge(e);
         }
-
         tsDraw.setEnd("End Drawing");
         application.setTextDraw(tsDraw.toString());
 
