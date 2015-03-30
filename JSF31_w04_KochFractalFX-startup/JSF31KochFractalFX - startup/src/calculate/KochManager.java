@@ -53,7 +53,8 @@ public class KochManager {
         //Start de TimeStamp vóór het genereren van de edges en stop daarna.
         tsCalc.init();
         tsCalc.setBegin("Begin Calculate");
-        Thread t1 = new Thread(new EdgesRunnable() {
+        Thread t1;
+        t1 = new Thread(new EdgesRunnable() {
 
             @Override
             public void run() {
@@ -64,8 +65,10 @@ public class KochManager {
             }
 
             @Override
-            public synchronized void update(Observable o, Object arg) {
-                edges.add((Edge) arg);
+            public void update(Observable o, Object arg) {
+                synchronized (edges) {
+                    edges.add((Edge) arg);
+                }
             }
         });
 
@@ -80,8 +83,10 @@ public class KochManager {
             }
 
             @Override
-            public synchronized void update(Observable o, Object arg) {
-                edges.add((Edge) arg);
+            public void update(Observable o, Object arg) {
+                synchronized (edges) {
+                    edges.add((Edge) arg);
+                }
             }
         });
 
@@ -96,25 +101,24 @@ public class KochManager {
             }
 
             @Override
-            public synchronized void update(Observable o, Object arg) {
-                edges.add((Edge) arg);
+            public void update(Observable o, Object arg) {
+                synchronized (edges) {
+                    edges.add((Edge) arg);
+                }
             }
         });
 
-        
-        
-        
+        t1.start();
+        t2.start();
+        t3.start();
 
         try {
-            t1.start();
             t1.join();
-            t2.start();
             t2.join();
-            t3.start();
             t3.join();
-            
+
             application.requestDrawEdges();
-            
+
         } catch (InterruptedException ex) {
 
         }
