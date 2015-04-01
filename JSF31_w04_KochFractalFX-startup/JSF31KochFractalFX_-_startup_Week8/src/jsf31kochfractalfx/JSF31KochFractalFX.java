@@ -5,6 +5,10 @@
 package jsf31kochfractalfx;
 
 import calculate.*;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -57,7 +61,7 @@ public class JSF31KochFractalFX extends Application {
     private final int kpHeight = 500;
     
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws InterruptedException, ExecutionException, BrokenBarrierException {
        
         // Define grid pane
         GridPane grid;
@@ -103,7 +107,11 @@ public class JSF31KochFractalFX extends Application {
         buttonIncreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                increaseLevelButtonActionPerformed(event);
+                try {
+                    increaseLevelButtonActionPerformed(event);
+                } catch (InterruptedException | ExecutionException | BrokenBarrierException ex) {
+                    Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         grid.add(buttonIncreaseLevel, 3, 6);
@@ -114,7 +122,11 @@ public class JSF31KochFractalFX extends Application {
         buttonDecreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                decreaseLevelButtonActionPerformed(event);
+                try {
+                    decreaseLevelButtonActionPerformed(event);
+                } catch (InterruptedException | ExecutionException | BrokenBarrierException ex) {
+                    Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         grid.add(buttonDecreaseLevel, 5, 6);
@@ -125,7 +137,11 @@ public class JSF31KochFractalFX extends Application {
         buttonFitFractal.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                fitFractalButtonActionPerformed(event);
+                try {
+                    fitFractalButtonActionPerformed(event);
+                } catch (InterruptedException | BrokenBarrierException ex) {
+                    Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         grid.add(buttonFitFractal, 14, 6);
@@ -135,7 +151,11 @@ public class JSF31KochFractalFX extends Application {
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    kochPanelMouseClicked(event);
+                    try {
+                        kochPanelMouseClicked(event);
+                    } catch (InterruptedException | BrokenBarrierException ex) {
+                        Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
         
@@ -152,7 +172,11 @@ public class JSF31KochFractalFX extends Application {
         kochPanel.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                kochPanelMouseDragged(event);
+                try {
+                    kochPanelMouseDragged(event);
+                } catch (InterruptedException | BrokenBarrierException ex) {
+                    Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
@@ -216,16 +240,20 @@ public class JSF31KochFractalFX extends Application {
         labelDrawText.setText(text);
     }
     
-    public void requestDrawEdges() {
+    public synchronized void requestDrawEdges() {
         Platform.runLater(new Runnable(){
             @Override
             public void run() {
-                kochManager.drawEdges();
+                try {
+                    kochManager.drawEdges();
+                } catch (InterruptedException | BrokenBarrierException ex) {
+                    Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
     
-    private void increaseLevelButtonActionPerformed(ActionEvent event) {
+    private void increaseLevelButtonActionPerformed(ActionEvent event) throws InterruptedException, ExecutionException, BrokenBarrierException {
         if (currentLevel < 12) {
             // resetZoom();
             currentLevel++;
@@ -234,7 +262,7 @@ public class JSF31KochFractalFX extends Application {
         }
     } 
     
-    private void decreaseLevelButtonActionPerformed(ActionEvent event) {
+    private void decreaseLevelButtonActionPerformed(ActionEvent event) throws InterruptedException, ExecutionException, BrokenBarrierException {
         if (currentLevel > 1) {
             // resetZoom();
             currentLevel--;
@@ -243,12 +271,12 @@ public class JSF31KochFractalFX extends Application {
         }
     } 
 
-    private void fitFractalButtonActionPerformed(ActionEvent event) {
+    private void fitFractalButtonActionPerformed(ActionEvent event) throws InterruptedException, BrokenBarrierException {
         resetZoom();
         kochManager.drawEdges();
     }
     
-    private void kochPanelMouseClicked(MouseEvent event) {
+    private void kochPanelMouseClicked(MouseEvent event) throws InterruptedException, BrokenBarrierException {
         if (Math.abs(event.getX() - startPressedX) < 1.0 && 
             Math.abs(event.getY() - startPressedY) < 1.0) {
             double originalPointClickedX = (event.getX() - zoomTranslateX) / zoom;
@@ -264,7 +292,7 @@ public class JSF31KochFractalFX extends Application {
         }
     }                                      
 
-    private void kochPanelMouseDragged(MouseEvent event) {
+    private void kochPanelMouseDragged(MouseEvent event) throws InterruptedException, BrokenBarrierException {
         zoomTranslateX = zoomTranslateX + event.getX() - lastDragX;
         zoomTranslateY = zoomTranslateY + event.getY() - lastDragY;
         lastDragX = event.getX();

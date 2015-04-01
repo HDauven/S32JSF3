@@ -6,8 +6,15 @@
 package calculate;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
-import jsf31kochfractalfx.EdgesRunnable;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import jsf31kochfractalfx.Task;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
 
@@ -18,22 +25,19 @@ import timeutil.TimeStamp;
 public class KochManager {
 
     private JSF31KochFractalFX application;
-    private KochFractal koch1;                   //De KochFractal.
-    private KochFractal koch2;                   //De KochFractal.
-    private KochFractal koch3;                   //De KochFractal.    
+    private KochFractal koch;                   //De KochFractal.
     private ArrayList<Edge> edges;              //ArrayList met alle edges.
     private ArrayList<String> timesAndEdges;    //ArrayList met de edges en tijd.
     private TimeStamp tsCalc;                   //TimeStamp voor het berekenen van de edges.
     private TimeStamp tsDraw;                   //TimeStamp voor het tekenen van de edges.
-    private EdgesRunnable Runnable;
     private int count = 0;
+    private ExecutorService pool = Executors.newFixedThreadPool(3);
+    private CyclicBarrier cb;
+    
 
     public KochManager(JSF31KochFractalFX application) {
         this.application = application;
-        koch1 = new KochFractal();
-        koch2 = new KochFractal();
-        koch3 = new KochFractal();
-        Runnable = new EdgesRunnable();
+        koch = new KochFractal();
         //koch.addObserver(Runnable);
         edges = new ArrayList<>();
         tsCalc = new TimeStamp();
@@ -44,90 +48,30 @@ public class KochManager {
     public synchronized void increaseCount() {
         count++;
     }
+    
+    public void executeTasks(int lvl) throws InterruptedException, ExecutionException, BrokenBarrierException {
+        for (int i = 1; i <= 3; i++) { 
+            Future<ArrayList<Edge>> fut = pool.submit(new Task(koch, lvl, i));
+            edges.addAll(fut.get());
+        }
+        application.requestDrawEdges();
+        //pool.shutdown();
+    }
 
-    public void changeLevel(int nxt) {
+    public void changeLevel(int nxt) throws InterruptedException, ExecutionException, BrokenBarrierException {
         //koch.setLevel(nxt);
-        final int help = nxt;
         edges.clear();
 
         //Start de TimeStamp vóór het genereren van de edges en stop daarna.
         tsCalc.init();
         tsCalc.setBegin("Begin Calculate");
-        Thread t1;
-        t1 = new Thread(new EdgesRunnable() {
-
-            @Override
-            public void run() {
-                koch1.addObserver(this);
-                koch1.setLevel(help);
-                koch1.generateLeftEdge();
-                increaseCount();
-            }
-
-            @Override
-            public void update(Observable o, Object arg) {
-                synchronized (edges) {
-                    edges.add((Edge) arg);
-                }
-            }
-        });
-
-        Thread t2 = new Thread(new EdgesRunnable() {
-
-            @Override
-            public void run() {
-                koch2.addObserver(this);
-                koch2.setLevel(help);
-                koch2.generateBottomEdge();
-                increaseCount();
-            }
-
-            @Override
-            public void update(Observable o, Object arg) {
-                synchronized (edges) {
-                    edges.add((Edge) arg);
-                }
-            }
-        });
-
-        Thread t3 = new Thread(new EdgesRunnable() {
-
-            @Override
-            public void run() {
-                koch3.addObserver(this);
-                koch3.setLevel(help);
-                koch3.generateRightEdge();
-                increaseCount();
-            }
-
-            @Override
-            public void update(Observable o, Object arg) {
-                synchronized (edges) {
-                    edges.add((Edge) arg);
-                }
-            }
-        });
-
-        t1.start();
-        t2.start();
-        t3.start();
-
-        try {
-            t1.join();
-            t2.join();
-            t3.join();
-
-            application.requestDrawEdges();
-
-        } catch (InterruptedException ex) {
-
-        }
+        executeTasks(nxt);
         tsCalc.setEnd("End Calculate");
 
         application.setTextCalc(tsCalc.toString());
     }
 
-    public void drawEdges() {
+    public void drawEdges() throws InterruptedException, BrokenBarrierException {
         application.clearKochPanel();
 
         //Start de TimeStamp vóór het tekenen van de edges en stop daarna.
@@ -140,7 +84,7 @@ public class KochManager {
         tsDraw.setEnd("End Drawing");
         application.setTextDraw(tsDraw.toString());
 
-        Integer nrOfEdges = koch1.getNrOfEdges();         //Haal het aantal edges op en sla deze op in nrOfEdges.
+        Integer nrOfEdges = koch.getNrOfEdges();         //Haal het aantal edges op en sla deze op in nrOfEdges.
         application.setTextNrEdges(nrOfEdges.toString()); //Converteer nrOfEdges naar een String
         //zodat deze gebruikt kan worden in setTextNrEdges.
         timesAndEdges.add(tsDraw.toString());
