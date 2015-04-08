@@ -15,6 +15,7 @@ import java.util.Observer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Future;
+import sun.security.krb5.internal.crypto.Des;
 
 /**
  *
@@ -26,17 +27,19 @@ public class Task implements Callable<ArrayList<Edge>>, Observer {
     int nxtlevel;
     int edge;
     ArrayList<Edge> edges;
+    CyclicBarrier barrier;
     
 
-    public Task(KochFractal kf, int nxtlvl, int edge) {
+    public Task(CyclicBarrier cb, KochFractal kf, int nxtlvl, int edge) {
         this.koch = kf;
         this.nxtlevel = nxtlvl;
         this.edge = edge;
         this.edges = new ArrayList<>();
+        this.barrier = cb;
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public synchronized void update(Observable o, Object arg) {
         this.edges.add((Edge) arg);
     }
 
@@ -49,14 +52,15 @@ public class Task implements Callable<ArrayList<Edge>>, Observer {
     public ArrayList<Edge> call() throws Exception {
        koch.addObserver(this);
         koch.setLevel(nxtlevel);
-        switch (edge) {
+            switch (edge) {
             case 1:
                 koch.generateBottomEdge();
             case 2:
                 koch.generateLeftEdge();
             case 3:
                 koch.generateRightEdge();
-        }
+        }      
+        barrier.await();
         return edges;
     }
 }

@@ -14,6 +14,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jsf31kochfractalfx.Task;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
@@ -43,6 +45,7 @@ public class KochManager {
         tsCalc = new TimeStamp();
         tsDraw = new TimeStamp();
         timesAndEdges = new ArrayList<>();
+        this.cb = new CyclicBarrier(3);
     }
 
     public synchronized void increaseCount() {
@@ -50,11 +53,14 @@ public class KochManager {
     }
     
     public void executeTasks(int lvl) throws InterruptedException, ExecutionException, BrokenBarrierException {
-        for (int i = 1; i <= 3; i++) { 
-            Future<ArrayList<Edge>> fut = pool.submit(new Task(koch, lvl, i));
-            edges.addAll(fut.get());
-        }
-        application.requestDrawEdges();
+            Future<ArrayList<Edge>> fut1 = pool.submit(new Task(cb, koch, lvl, 1));
+            Future<ArrayList<Edge>> fut2 = pool.submit(new Task(cb, koch, lvl, 2));
+            Future<ArrayList<Edge>> fut3 = pool.submit(new Task(cb, koch, lvl, 3));
+            edges.addAll(fut1.get());
+            edges.addAll(fut2.get());
+            edges.addAll(fut3.get());
+            
+            application.requestDrawEdges();
         //pool.shutdown();
     }
 
