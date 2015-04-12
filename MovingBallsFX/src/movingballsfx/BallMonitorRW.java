@@ -67,7 +67,9 @@ public class BallMonitorRW
         {
             while (writersActive > 0 || readersActive > 0)
             {
+                writersWaiting++;
                 okToWrite.await();
+                writersWaiting--;
             }
             writersActive++;
         }
@@ -83,13 +85,13 @@ public class BallMonitorRW
         try
         {
             writersActive--;
-            if (readersWaiting > 0)
+            if (writersWaiting > 0 && writersActive == 0)
             {
-                okToRead.signal();
+                okToWrite.signal();
             }
             else
             {
-                okToWrite.signal();
+                okToRead.signalAll();
             }
         }
         finally
