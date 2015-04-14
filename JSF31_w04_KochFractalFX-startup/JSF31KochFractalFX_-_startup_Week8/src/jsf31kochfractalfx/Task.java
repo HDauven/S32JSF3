@@ -30,13 +30,12 @@ public class Task implements Callable<ArrayList<Edge>>, Observer {
     CyclicBarrier barrier;
     
 
-    public Task(CyclicBarrier cb, int nxtlvl, int edge) {
-        this.koch = new KochFractal();
+    public Task(CyclicBarrier cb, KochFractal kf, int nxtlvl, int edge) {
+        this.koch = kf;
         this.nxtlevel = nxtlvl;
         this.edge = edge;
         this.edges = new ArrayList<>();
         this.barrier = cb;
-        koch.addObserver(this);
     }
 
     @Override
@@ -51,6 +50,7 @@ public class Task implements Callable<ArrayList<Edge>>, Observer {
 
     @Override
     public ArrayList<Edge> call() throws Exception {
+       koch.addObserver(this);
         koch.setLevel(nxtlevel);
             switch (edge) {
             case 1:

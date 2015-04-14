@@ -53,9 +53,9 @@ public class KochManager {
     }
     
     public void executeTasks(int lvl) throws InterruptedException, ExecutionException, BrokenBarrierException {
-            Future<ArrayList<Edge>> fut1 = pool.submit(new Task(cb, lvl, 1));
-            Future<ArrayList<Edge>> fut2 = pool.submit(new Task(cb, lvl, 2));
-            Future<ArrayList<Edge>> fut3 = pool.submit(new Task(cb, lvl, 3));
+            Future<ArrayList<Edge>> fut1 = pool.submit(new Task(cb, koch, lvl, 1));
+            Future<ArrayList<Edge>> fut2 = pool.submit(new Task(cb, koch, lvl, 2));
+            Future<ArrayList<Edge>> fut3 = pool.submit(new Task(cb, koch, lvl, 3));
             edges.addAll(fut1.get());
             edges.addAll(fut2.get());
             edges.addAll(fut3.get());
