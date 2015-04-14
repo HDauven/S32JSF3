@@ -35,8 +35,6 @@ public class MovingBallsFX extends Application {
     private int radius = 10;
     private int minCsX = (maxX + minX) / 2 - 100;
     private int maxCsX = (maxX + minX) / 2 + 100;
-    
-    private BallMonitorRW monitor = new BallMonitorRW();
 
     @Override
     public void start(Stage primaryStage) {
@@ -107,6 +105,7 @@ public class MovingBallsFX extends Application {
     }
     
     private void checkBoxMouseClicked(MouseEvent event, int index) {
+        BallMonitorRW monitor = new BallMonitorRW();
         CheckBox cb = checkBoxArray[index];
         int y = (int) cb.getLayoutY() + radius;
         if (cb.isSelected() && index < 5) { 
@@ -127,6 +126,14 @@ public class MovingBallsFX extends Application {
             t.start();
         } else {
             // Reader or writer deselected: remove ball
+            if (cb.isSelected() && index < 5)
+            {
+                monitor.exitReader();
+            }
+            else if (cb.isSelected() && index >= 5)
+            {
+                monitor.exitWriter();
+            }
             threadArray[index].interrupt();
             threadArray[index] = null;
             ballArray[index] = null;
