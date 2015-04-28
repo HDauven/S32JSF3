@@ -14,8 +14,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.concurrent.Task;
 import jsf31kochfractalfx.JavaFXTask;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
@@ -24,8 +26,7 @@ import timeutil.TimeStamp;
  *
  * @author Jelle
  */
-public class KochManager
-{
+public class KochManager {
 
     private JSF31KochFractalFX application;
     private KochFractal koch;                   //De KochFractal.
@@ -36,12 +37,11 @@ public class KochManager
     private int count = 0;
     private ExecutorService pool = Executors.newFixedThreadPool(3);
     private CyclicBarrier cb;
-    private JavaFXTask task1 = null;
-    private JavaFXTask task2 = null;
-    private JavaFXTask task3 = null;
+    private Task task1 = null;
+    private Task task2 = null;
+    private Task task3 = null;
 
-    public KochManager(JSF31KochFractalFX application)
-    {
+    public KochManager(JSF31KochFractalFX application) {
         this.application = application;
         koch = new KochFractal();
         //koch.addObserver(Runnable);
@@ -52,44 +52,27 @@ public class KochManager
         this.cb = new CyclicBarrier(3);
     }
 
-    public JavaFXTask getTask1()
-    {
-        return this.task1;
-    }
-
-    public JavaFXTask getTask2()
-    {
-        return this.task2;
-    }
-
-    public JavaFXTask getTask3()
-    {
-        return this.task3;
-    }
-
-    public synchronized void increaseCount()
-    {
+    public synchronized void increaseCount() {
         count++;
     }
 
-    public void executeTasks(int lvl) throws InterruptedException, ExecutionException, BrokenBarrierException
-    {
+    public void executeTasks(int lvl) throws InterruptedException, ExecutionException, BrokenBarrierException {
         task1 = new JavaFXTask(cb, koch, lvl, 1);
         task2 = new JavaFXTask(cb, koch, lvl, 2);
         task3 = new JavaFXTask(cb, koch, lvl, 3);
-//            Future<ArrayList<Edge>> fut1 = pool.submit(task1);
-//            Future<ArrayList<Edge>> fut2 = pool.submit(task2);
-//            Future<ArrayList<Edge>> fut3 = pool.submit(task3);
-//            edges.addAll(fut1.get());
-//            edges.addAll(fut2.get());
-//            edges.addAll(fut3.get());
+        application.bindProgressBars(task1, task2, task3);
+        Future<ArrayList<Edge>> fut1 = (Future<ArrayList<Edge>>) pool.submit(task1);
+        Future<ArrayList<Edge>> fut2 = (Future<ArrayList<Edge>>) pool.submit(task2);
+        Future<ArrayList<Edge>> fut3 = (Future<ArrayList<Edge>>) pool.submit(task3);
+//        edges.addAll(fut1.get());
+//        edges.addAll(fut2.get());
+//        edges.addAll(fut3.get());
 
         application.requestDrawEdges();
         //pool.shutdown();
     }
 
-    public void changeLevel(int nxt) throws InterruptedException, ExecutionException, BrokenBarrierException
-    {
+    public void changeLevel(int nxt) throws InterruptedException, ExecutionException, BrokenBarrierException {
         //koch.setLevel(nxt);
         edges.clear();
 
@@ -102,8 +85,7 @@ public class KochManager
         application.setTextCalc(tsCalc.toString());
     }
 
-    public void drawEdges() throws InterruptedException, BrokenBarrierException
-    {
+    public void drawEdges() throws InterruptedException, BrokenBarrierException {
         application.clearKochPanel();
 
         //Start de TimeStamp vóór het tekenen van de edges en stop daarna.

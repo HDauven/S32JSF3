@@ -23,9 +23,10 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
     KochFractal koch;
     int nxtlevel;
     int edge;
+    int MAX;
+    int nrOfEdgesGenerated;
     ArrayList<Edge> edges;
     CyclicBarrier barrier;
-    
 
     public JavaFXTask(CyclicBarrier cb, KochFractal kf, int nxtlvl, int edge) {
         this.koch = kf;
@@ -33,30 +34,34 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
         this.edge = edge;
         this.edges = new ArrayList<>();
         this.barrier = cb;
+        this.MAX = koch.getNrOfEdges();
+        this.nrOfEdgesGenerated = 0;
     }
 
     @Override
     public synchronized void update(Observable o, Object arg) {
         this.edges.add((Edge) arg);
+        nrOfEdgesGenerated++;
+        updateProgress(nrOfEdgesGenerated, MAX);
+        updateMessage(String.valueOf(nrOfEdgesGenerated));
     }
 
     /**
      *
      * @return @throws Exception
      */
-
     @Override
     public ArrayList<Edge> call() throws Exception {
-       koch.addObserver(this);
+        koch.addObserver(this);
         koch.setLevel(nxtlevel);
-            switch (edge) {
+        switch (edge) {
             case 1:
                 koch.generateBottomEdge();
             case 2:
                 koch.generateLeftEdge();
             case 3:
                 koch.generateRightEdge();
-        }      
+        }
         barrier.await();
         return edges;
     }
