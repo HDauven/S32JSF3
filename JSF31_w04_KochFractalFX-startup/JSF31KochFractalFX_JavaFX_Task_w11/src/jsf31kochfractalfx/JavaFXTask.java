@@ -12,12 +12,13 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
+import javafx.concurrent.Task;
 
 /**
  *
  * @author Jelle
  */
-public class Task implements Callable<ArrayList<Edge>>, Observer {
+public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
 
     KochFractal koch;
     int nxtlevel;
@@ -26,7 +27,7 @@ public class Task implements Callable<ArrayList<Edge>>, Observer {
     CyclicBarrier barrier;
     
 
-    public Task(CyclicBarrier cb, KochFractal kf, int nxtlvl, int edge) {
+    public JavaFXTask(CyclicBarrier cb, KochFractal kf, int nxtlvl, int edge) {
         this.koch = kf;
         this.nxtlevel = nxtlvl;
         this.edge = edge;
