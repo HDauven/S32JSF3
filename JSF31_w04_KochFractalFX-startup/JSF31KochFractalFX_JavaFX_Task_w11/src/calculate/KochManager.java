@@ -57,16 +57,17 @@ public class KochManager {
     }
 
     public void executeTasks(int lvl) throws InterruptedException, ExecutionException, BrokenBarrierException {
-        task1 = new JavaFXTask(cb, koch, lvl, 1);
-        task2 = new JavaFXTask(cb, koch, lvl, 2);
-        task3 = new JavaFXTask(cb, koch, lvl, 3);
+        task1 = new JavaFXTask(cb, koch, lvl, 1, application);
+        task2 = new JavaFXTask(cb, koch, lvl, 2, application);
+        task3 = new JavaFXTask(cb, koch, lvl, 3, application);
         application.bindProgressBars(task1, task2, task3);
+
         Future<ArrayList<Edge>> fut1 = (Future<ArrayList<Edge>>) pool.submit(task1);
         Future<ArrayList<Edge>> fut2 = (Future<ArrayList<Edge>>) pool.submit(task2);
         Future<ArrayList<Edge>> fut3 = (Future<ArrayList<Edge>>) pool.submit(task3);
-//        edges.addAll(fut1.get());
-//        edges.addAll(fut2.get());
-//        edges.addAll(fut3.get());
+      //  edges.addAll(fut1.get());
+      //  edges.addAll(fut2.get());
+       // edges.addAll(fut3.get());
 
         application.requestDrawEdges();
         //pool.shutdown();

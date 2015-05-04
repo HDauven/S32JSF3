@@ -13,6 +13,7 @@ import java.util.Observer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import javafx.concurrent.Task;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -27,8 +28,9 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
     int nrOfEdgesGenerated;
     ArrayList<Edge> edges;
     CyclicBarrier barrier;
+    JSF31KochFractalFX application;
 
-    public JavaFXTask(CyclicBarrier cb, KochFractal kf, int nxtlvl, int edge) {
+    public JavaFXTask(CyclicBarrier cb, KochFractal kf, int nxtlvl, int edge, JSF31KochFractalFX app) {
         this.koch = kf;
         this.nxtlevel = nxtlvl;
         this.edge = edge;
@@ -36,10 +38,14 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
         this.barrier = cb;
         this.MAX = koch.getNrOfEdges();
         this.nrOfEdgesGenerated = 0;
+        this.application = app;
     }
 
     @Override
     public synchronized void update(Observable o, Object arg) {
+        Edge e = (Edge) arg;
+        e.color = Color.WHITE;
+        //application.drawEdge(e);
         this.edges.add((Edge) arg);
         nrOfEdgesGenerated++;
         updateProgress(nrOfEdgesGenerated, MAX);

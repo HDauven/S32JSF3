@@ -184,6 +184,8 @@ public class JSF31KochFractalFX extends Application {
         // Label progress number of edges
         labelEdgesLeft = new Label("Nr edges: ");
         grid.add(labelEdgesLeft, 7, 8);
+        
+        
 
         labelEdgesBottom = new Label("Nr edges: ");
         grid.add(labelEdgesBottom, 7, 10);
@@ -287,6 +289,10 @@ public class JSF31KochFractalFX extends Application {
         progressLeft.progressProperty().bind(t1.progressProperty());
         progressBottom.progressProperty().bind(t2.progressProperty());
         progressRight.progressProperty().bind(t3.progressProperty());
+        labelEdgesLeft.textProperty().bind(t1.messageProperty());
+        labelEdgesBottom.textProperty().bind(t2.messageProperty());
+        labelEdgesRight.textProperty().bind(t3.messageProperty());
+        
     }
 
     public synchronized void requestDrawEdges() {
