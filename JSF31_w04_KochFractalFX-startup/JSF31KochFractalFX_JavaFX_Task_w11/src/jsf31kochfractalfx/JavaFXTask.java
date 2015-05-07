@@ -68,6 +68,7 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
             case 3:
                 koch.generateRightEdge();
         }
+        Thread.sleep(5);
         barrier.await();
         return edges;
     }

@@ -26,7 +26,8 @@ import timeutil.TimeStamp;
  *
  * @author Jelle
  */
-public class KochManager {
+public class KochManager
+{
 
     private JSF31KochFractalFX application;
     private KochFractal koch;                   //De KochFractal.
@@ -41,7 +42,8 @@ public class KochManager {
     private Task task2 = null;
     private Task task3 = null;
 
-    public KochManager(JSF31KochFractalFX application) {
+    public KochManager(JSF31KochFractalFX application)
+    {
         this.application = application;
         koch = new KochFractal();
         //koch.addObserver(Runnable);
@@ -52,11 +54,13 @@ public class KochManager {
         this.cb = new CyclicBarrier(3);
     }
 
-    public synchronized void increaseCount() {
+    public synchronized void increaseCount()
+    {
         count++;
     }
 
-    public void executeTasks(int lvl) throws InterruptedException, ExecutionException, BrokenBarrierException {
+    public void executeTasks(int lvl) throws InterruptedException, ExecutionException, BrokenBarrierException
+    {
         task1 = new JavaFXTask(cb, koch, lvl, 1, application);
         task2 = new JavaFXTask(cb, koch, lvl, 2, application);
         task3 = new JavaFXTask(cb, koch, lvl, 3, application);
@@ -66,15 +70,28 @@ public class KochManager {
         Future<ArrayList<Edge>> fut2 = (Future<ArrayList<Edge>>) pool.submit(task2);
         Future<ArrayList<Edge>> fut3 = (Future<ArrayList<Edge>>) pool.submit(task3);
       //  edges.addAll(fut1.get());
-      //  edges.addAll(fut2.get());
-       // edges.addAll(fut3.get());
+        //  edges.addAll(fut2.get());
+        // edges.addAll(fut3.get());
 
         application.requestDrawEdges();
         //pool.shutdown();
     }
 
-    public void changeLevel(int nxt) throws InterruptedException, ExecutionException, BrokenBarrierException {
+    public void changeLevel(int nxt) throws InterruptedException, ExecutionException, BrokenBarrierException
+    {
         //koch.setLevel(nxt);
+        if (task1 != null && task2 != null && task3 != null)
+        {
+            if (task1.isRunning() || task2.isRunning() || task3.isRunning())
+            {
+                koch.cancel();
+
+                task1.cancel();
+                task2.cancel();
+                task3.cancel();
+            }
+        }
+
         edges.clear();
 
         //Start de TimeStamp vóór het genereren van de edges en stop daarna.
@@ -86,7 +103,8 @@ public class KochManager {
         application.setTextCalc(tsCalc.toString());
     }
 
-    public void drawEdges() throws InterruptedException, BrokenBarrierException {
+    public void drawEdges() throws InterruptedException, BrokenBarrierException
+    {
         application.clearKochPanel();
 
         //Start de TimeStamp vóór het tekenen van de edges en stop daarna.
