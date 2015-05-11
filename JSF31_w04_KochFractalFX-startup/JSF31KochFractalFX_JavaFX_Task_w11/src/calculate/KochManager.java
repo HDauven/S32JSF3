@@ -12,7 +12,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.scene.paint.Color;
 import jsf31kochfractalfx.JavaFXTask;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
@@ -64,7 +66,7 @@ public class KochManager
         pool.submit(task1);
         pool.submit(task2);
         pool.submit(task3);
-        
+
         edges.addAll(task1.get());
         edges.addAll(task2.get());
         edges.addAll(task3.get());
@@ -100,6 +102,7 @@ public class KochManager
 
     public void drawEdges() throws InterruptedException, BrokenBarrierException
     {
+
         application.clearKochPanel();
 
         //Start de TimeStamp vóór het tekenen van de edges en stop daarna.
@@ -110,6 +113,7 @@ public class KochManager
             application.drawEdge(e);
         }
         tsDraw.setEnd("End Drawing");
+
         application.setTextDraw(tsDraw.toString());
 
         Integer nrOfEdges = koch.getNrOfEdges();         //Haal het aantal edges op en sla deze op in nrOfEdges.

@@ -12,6 +12,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 
@@ -23,16 +25,16 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
 
     KochFractal koch;
     int nxtlevel;
-    int edge;
+    int edgeNumber;
     int MAX;
     int nrOfEdgesGenerated;
     ArrayList<Edge> edges;
     JSF31KochFractalFX application;
 
-    public JavaFXTask(int nxtlvl, int edge, JSF31KochFractalFX app) {
+    public JavaFXTask(int nxtlvl, int edgeNumber, JSF31KochFractalFX app) {
         this.koch = new KochFractal();
         this.nxtlevel = nxtlvl;
-        this.edge = edge;
+        this.edgeNumber = edgeNumber;
         this.edges = new ArrayList<>();
         this.MAX = koch.getNrOfEdges();
         this.nrOfEdgesGenerated = 0;
@@ -42,9 +44,10 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
     @Override
     public synchronized void update(Observable o, Object arg) {
         Edge e = (Edge) arg;
+        Edge e2 = new Edge(e.X1, e.X2, e.Y1, e.X2, e.color);
         e.color = Color.WHITE;
-        //application.drawEdge(e);
-        this.edges.add((Edge) arg);
+        application.drawEdge(e);
+        this.edges.add(e2);
         nrOfEdgesGenerated++;
         updateProgress(nrOfEdgesGenerated, MAX);
         updateMessage(String.valueOf(nrOfEdgesGenerated));
@@ -58,7 +61,7 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
     public ArrayList<Edge> call() throws Exception {
         koch.addObserver(this);
         koch.setLevel(nxtlevel);
-        switch (edge) {
+        switch (edgeNumber) {
             case 1:
                 koch.generateBottomEdge();
             case 2:
