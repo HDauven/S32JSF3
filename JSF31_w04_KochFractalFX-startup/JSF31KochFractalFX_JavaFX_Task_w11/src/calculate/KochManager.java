@@ -6,17 +6,12 @@
 package calculate;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import jsf31kochfractalfx.JavaFXTask;
 import jsf31kochfractalfx.JSF31KochFractalFX;
@@ -61,18 +56,21 @@ public class KochManager
 
     public void executeTasks(int lvl) throws InterruptedException, ExecutionException, BrokenBarrierException
     {
-        task1 = new JavaFXTask(cb, koch, lvl, 1, application);
-        task2 = new JavaFXTask(cb, koch, lvl, 2, application);
-        task3 = new JavaFXTask(cb, koch, lvl, 3, application);
+        task1 = new JavaFXTask(lvl, 1, application);
+        task2 = new JavaFXTask(lvl, 2, application);
+        task3 = new JavaFXTask(lvl, 3, application);
         application.bindProgressBars(task1, task2, task3);
 
         Future<ArrayList<Edge>> fut1 = (Future<ArrayList<Edge>>) pool.submit(task1);
         Future<ArrayList<Edge>> fut2 = (Future<ArrayList<Edge>>) pool.submit(task2);
         Future<ArrayList<Edge>> fut3 = (Future<ArrayList<Edge>>) pool.submit(task3);
-      //  edges.addAll(fut1.get());
-        //  edges.addAll(fut2.get());
-        // edges.addAll(fut3.get());
+        ArrayList<Edge> edgeList1 = fut1.get();
+        ArrayList<Edge> edgeList2 = fut2.get();
+        ArrayList<Edge> edgeList3 = fut3.get();
 
+//        edges.addAll(fut1.get());
+//        edges.addAll(fut2.get());
+//        edges.addAll(fut3.get());
         application.requestDrawEdges();
         //pool.shutdown();
     }

@@ -27,15 +27,13 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
     int MAX;
     int nrOfEdgesGenerated;
     ArrayList<Edge> edges;
-    CyclicBarrier barrier;
     JSF31KochFractalFX application;
 
-    public JavaFXTask(CyclicBarrier cb, KochFractal kf, int nxtlvl, int edge, JSF31KochFractalFX app) {
-        this.koch = kf;
+    public JavaFXTask(int nxtlvl, int edge, JSF31KochFractalFX app) {
+        this.koch = new KochFractal();
         this.nxtlevel = nxtlvl;
         this.edge = edge;
         this.edges = new ArrayList<>();
-        this.barrier = cb;
         this.MAX = koch.getNrOfEdges();
         this.nrOfEdgesGenerated = 0;
         this.application = app;
@@ -68,8 +66,6 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
             case 3:
                 koch.generateRightEdge();
         }
-        Thread.sleep(5);
-        barrier.await();
         return edges;
     }
 }
