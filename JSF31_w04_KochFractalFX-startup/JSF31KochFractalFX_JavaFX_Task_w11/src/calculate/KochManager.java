@@ -33,9 +33,9 @@ public class KochManager
     private int count = 0;
     private ExecutorService pool = Executors.newFixedThreadPool(3);
     private CyclicBarrier cb;
-    private Task task1 = null;
-    private Task task2 = null;
-    private Task task3 = null;
+    private Task<ArrayList<Edge>> task1 = null;
+    private Task<ArrayList<Edge>> task2 = null;
+    private Task<ArrayList<Edge>> task3 = null;
 
     public KochManager(JSF31KochFractalFX application)
     {
@@ -61,16 +61,13 @@ public class KochManager
         task3 = new JavaFXTask(lvl, 3, application);
         application.bindProgressBars(task1, task2, task3);
 
-        Future<ArrayList<Edge>> fut1 = (Future<ArrayList<Edge>>) pool.submit(task1);
-        Future<ArrayList<Edge>> fut2 = (Future<ArrayList<Edge>>) pool.submit(task2);
-        Future<ArrayList<Edge>> fut3 = (Future<ArrayList<Edge>>) pool.submit(task3);
-        ArrayList<Edge> edgeList1 = fut1.get();
-        ArrayList<Edge> edgeList2 = fut2.get();
-        ArrayList<Edge> edgeList3 = fut3.get();
-
-//        edges.addAll(fut1.get());
-//        edges.addAll(fut2.get());
-//        edges.addAll(fut3.get());
+        pool.submit(task1);
+        pool.submit(task2);
+        pool.submit(task3);
+        
+        edges.addAll(task1.get());
+        edges.addAll(task2.get());
+        edges.addAll(task3.get());
         application.requestDrawEdges();
         //pool.shutdown();
     }
