@@ -277,10 +277,8 @@ public class JSF31KochFractalFX extends Application
     {
         Platform.runLater(new Runnable()
         {
-
             @Override
-            public void run()
-            {
+            public void run() {
                 // Graphics
                 GraphicsContext gc = kochPanel.getGraphicsContext2D();
 
@@ -303,9 +301,9 @@ public class JSF31KochFractalFX extends Application
                 }
                 // Draw line
                 gc.strokeLine(e1.X1, e1.Y1, e1.X2, e1.Y2);
-            }
-
+           }
         });
+                
 
     }
 

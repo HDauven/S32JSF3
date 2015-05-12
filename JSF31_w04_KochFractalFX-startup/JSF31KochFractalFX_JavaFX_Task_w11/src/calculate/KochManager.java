@@ -102,7 +102,6 @@ public class KochManager
 
     public void drawEdges() throws InterruptedException, BrokenBarrierException
     {
-
         application.clearKochPanel();
 
         //Start de TimeStamp vóór het tekenen van de edges en stop daarna.

@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 
@@ -43,14 +44,14 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer {
 
     @Override
     public synchronized void update(Observable o, Object arg) {
-        Edge e = (Edge) arg;
-        Edge e2 = new Edge(e.X1, e.X2, e.Y1, e.X2, e.color);
-        e.color = Color.WHITE;
-        application.drawEdge(e);
-        this.edges.add(e2);
-        nrOfEdgesGenerated++;
-        updateProgress(nrOfEdgesGenerated, MAX);
-        updateMessage(String.valueOf(nrOfEdgesGenerated));
+            Edge e = (Edge) arg;
+            Edge e2 = new Edge(e.X1, e.Y1, e.X2, e.Y2, e.color);
+            e2.color = Color.WHITE;
+            application.drawEdge(e2);
+            this.edges.add(e);
+            nrOfEdgesGenerated++;
+            updateProgress(nrOfEdgesGenerated, MAX);
+            updateMessage(String.valueOf(nrOfEdgesGenerated));
     }
 
     /**
