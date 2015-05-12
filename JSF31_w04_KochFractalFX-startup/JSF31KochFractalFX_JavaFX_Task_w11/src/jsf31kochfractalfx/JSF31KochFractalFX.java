@@ -301,15 +301,16 @@ public class JSF31KochFractalFX extends Application
                 {
                     gc.setLineWidth(1.0);
                 }
+
                 // Draw line
                 gc.strokeLine(e1.X1, e1.Y1, e1.X2, e1.Y2);
+                
             }
-
         });
 
     }
 
-    public void setTextNrEdges(String text)
+    public void setTextNrOfEdges(String text)
     {
         labelNrEdgesText.setText(text);
     }

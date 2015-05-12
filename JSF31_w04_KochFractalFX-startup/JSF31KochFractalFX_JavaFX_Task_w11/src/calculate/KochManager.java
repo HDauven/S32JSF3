@@ -27,9 +27,8 @@ public class KochManager
 {
 
     private JSF31KochFractalFX application;
-    private KochFractal koch;                   //De KochFractal.
+    //private KochFractal koch;                   //De KochFractal.
     private ArrayList<Edge> edges;              //ArrayList met alle edges.
-    private ArrayList<String> timesAndEdges;    //ArrayList met de edges en tijd.
     private TimeStamp tsCalc;                   //TimeStamp voor het berekenen van de edges.
     private TimeStamp tsDraw;                   //TimeStamp voor het tekenen van de edges.
     private int count = 0;
@@ -42,13 +41,10 @@ public class KochManager
     public KochManager(JSF31KochFractalFX application)
     {
         this.application = application;
-        koch = new KochFractal();
         //koch.addObserver(Runnable);
         edges = new ArrayList<>();
         tsCalc = new TimeStamp();
         tsDraw = new TimeStamp();
-        timesAndEdges = new ArrayList<>();
-        this.cb = new CyclicBarrier(3);
     }
 
     public synchronized void increaseCount()
@@ -76,13 +72,14 @@ public class KochManager
 
     public void changeLevel(int nxt) throws InterruptedException, ExecutionException, BrokenBarrierException
     {
+
+        application.clearKochPanel();
+
         //koch.setLevel(nxt);
         if (task1 != null && task2 != null && task3 != null)
         {
             if (task1.isRunning() || task2.isRunning() || task3.isRunning())
             {
-                koch.cancel();
-
                 task1.cancel();
                 task2.cancel();
                 task3.cancel();
@@ -103,10 +100,9 @@ public class KochManager
     public void drawEdges() throws InterruptedException, BrokenBarrierException
     {
 
-        application.clearKochPanel();
-
-        //Start de TimeStamp vóór het tekenen van de edges en stop daarna.
+        //Start de TimeStamp vóór het tekenen van de edges en stop na het tekenen.
         tsDraw.init();
+
         tsDraw.setBegin("Begin Drawing");
         for (Edge e : edges) //Loop door de ArrayList van edges en teken deze.
         {
@@ -116,10 +112,10 @@ public class KochManager
 
         application.setTextDraw(tsDraw.toString());
 
-        Integer nrOfEdges = koch.getNrOfEdges();         //Haal het aantal edges op en sla deze op in nrOfEdges.
-        application.setTextNrEdges(nrOfEdges.toString()); //Converteer nrOfEdges naar een String
-        //zodat deze gebruikt kan worden in setTextNrEdges.
-        timesAndEdges.add(tsDraw.toString());
-        timesAndEdges.add(nrOfEdges.toString());
+        int nrOfEdges = edges.size();
+        String numberOfEdges = Integer.toString(nrOfEdges);
+        
+        application.setTextNrOfEdges(numberOfEdges);
+
     }
 }
