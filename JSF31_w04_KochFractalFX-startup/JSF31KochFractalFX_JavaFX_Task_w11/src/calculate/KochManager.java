@@ -116,6 +116,5 @@ public class KochManager
         String numberOfEdges = Integer.toString(nrOfEdges);
         
         application.setTextNrOfEdges(numberOfEdges);
-
     }
 }

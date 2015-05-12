@@ -42,18 +42,6 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer
         this.application = app;
     }
 
-    @Override
-<<<<<<< HEAD
-    public synchronized void update(Observable o, Object arg) {
-            Edge e = (Edge) arg;
-            Edge e2 = new Edge(e.X1, e.Y1, e.X2, e.Y2, e.color);
-            e2.color = Color.WHITE;
-            application.drawEdge(e2);
-            this.edges.add(e);
-            nrOfEdgesGenerated++;
-            updateProgress(nrOfEdgesGenerated, MAX);
-            updateMessage(String.valueOf(nrOfEdgesGenerated));
-=======
     public synchronized void update(Observable o, Object arg)
     {
         Edge e = (Edge) arg;
@@ -71,7 +59,6 @@ public class JavaFXTask extends Task<ArrayList<Edge>> implements Observer
         nrOfEdgesGenerated++;
         updateProgress(nrOfEdgesGenerated, MAX);
         updateMessage(String.valueOf(nrOfEdgesGenerated));
->>>>>>> a3f824191bf0d494cb51ee94a6cd4f3df6d2c16f
     }
 
     /**
