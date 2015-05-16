@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Jelle
  */
-public class JSF32_Week12_NoGUI
+public class JSF32_Week12_NoGUI implements Observer
 {
 
     private KochFractal fractal = new KochFractal();
@@ -36,6 +38,7 @@ public class JSF32_Week12_NoGUI
 
     public void start() throws IOException
     {
+        fractal.addObserver(this);
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(inputStreamReader);
         System.out.println("Voor welk level moeten de edges gegenereerd worden?");
@@ -47,39 +50,18 @@ public class JSF32_Week12_NoGUI
             {
                 throw new NumberFormatException();
             }
+            
+            fractal.setLevel(level);
+            fractal.generateBottomEdge();
+            fractal.generateLeftEdge();
+            fractal.generateRightEdge();
+            writeEdges();
+            
 
-            generateEdge(level, 1);
-            generateEdge(level, 2);
-            generateEdge(level, 3);
         } catch (NumberFormatException exc)
         {
             System.err.println("Ongeldig level!");
         }
-    }
-
-    public void generateEdge(int level, int edgeNumber)
-    {
-        fractal.setLevel(level);
-        switch (edgeNumber)
-        {
-            case 1:
-            {
-                edges.add(fractal.generateBottomEdge());
-                break;
-            }
-            case 2:
-            {
-                edges.add(fractal.generateLeftEdge());
-                break;
-            }
-            case 3:
-            {
-                edges.add(fractal.generateRightEdge());
-                break;
-            }
-        }
-        
-        writeEdges();
     }
 
     public void writeEdges()
@@ -102,5 +84,12 @@ public class JSF32_Week12_NoGUI
         {
 
         }
+    }
+
+    @Override
+    public synchronized void update(Observable o, Object arg) {
+        Edge e = (Edge) arg;
+        edges.add(e);
+        System.out.println("updated");
     }
 }
