@@ -8,7 +8,6 @@ package jsf32_week12_nogui;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,8 +17,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -56,15 +53,7 @@ public class JSF32_Week12_NoGUI implements Observer
             {
                 throw new NumberFormatException();
             }
-            
-            fractal.setLevel(level);
-            fractal.generateBottomEdge();
-            fractal.generateLeftEdge();
-            fractal.generateRightEdge();
-            writeEdges();
-            
 
-<<<<<<< HEAD
             fractal.setLevel(level);
 
             fractal.generateBottomEdge();
@@ -77,15 +66,11 @@ public class JSF32_Week12_NoGUI implements Observer
             writeBinaryFileWithBuffer();
         }
         catch (NumberFormatException exc)
-=======
-        } catch (NumberFormatException exc)
->>>>>>> origin/master
         {
             System.err.println("Ongeldig level!");
         }
     }
 
-<<<<<<< HEAD
     public void writeTextFileNoBuffer()
     {
         FileWriter fw;
@@ -160,9 +145,6 @@ public class JSF32_Week12_NoGUI implements Observer
     }
 
     public void writeBinaryFileWithBuffer()
-=======
-    public void writeEdges()
->>>>>>> origin/master
     {
         try
         {
@@ -187,16 +169,9 @@ public class JSF32_Week12_NoGUI implements Observer
     }
 
     @Override
-<<<<<<< HEAD
     public synchronized void update(Observable o, Object arg)
     {
         Edge e = (Edge) arg;
         this.edges.add(e);
-=======
-    public synchronized void update(Observable o, Object arg) {
-        Edge e = (Edge) arg;
-        edges.add(e);
-        System.out.println("updated");
->>>>>>> origin/master
     }
 }

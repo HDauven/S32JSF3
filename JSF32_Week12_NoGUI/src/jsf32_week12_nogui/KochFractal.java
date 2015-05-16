@@ -45,7 +45,6 @@ public class KochFractal extends Observable
             }
         }
     }
-<<<<<<< HEAD
 
     public void generateLeftEdge()
     {
@@ -65,28 +64,6 @@ public class KochFractal extends Observable
     {
         hue = 2f / 3f;
         cancelled = false;
-=======
-    
-    public void generateLeftEdge() {
-        hue = 0f;
-        cancelled = false;
-        //Edge e = new Edge(0.5, 0.0, (1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, Color.hsb(hue*360.0, 1.0, 1.0));
-        drawKochEdge(0.5, 0.0, (1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, level);
-    }
-
-    public void generateBottomEdge() {
-        hue = 1f / 3f;
-        cancelled = false;
-        //Edge e = new Edge((1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, (1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, Color.hsb(hue*360.0, 1.0, 1.0));
-        drawKochEdge((1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, (1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, level);
-    }
-
-    public void generateRightEdge() {
-        hue = 2f / 3f;
-        cancelled = false;
-        //Edge e = new Edge((1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, 0.5, 0.0, Color.hsb(hue*360.0, 1.0, 1.0));
->>>>>>> origin/master
-        drawKochEdge((1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, 0.5, 0.0, level);
     }
 
     public void cancel()
