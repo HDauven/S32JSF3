@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jsf32_week12_nogui;
 
 import java.util.Observable;
@@ -12,21 +11,27 @@ import javafx.scene.paint.Color;
  *
  * @author Peter Boots
  */
-public class KochFractal extends Observable {
+public class KochFractal extends Observable
+{
 
     private int level = 1;      // The current level of the fractal
     private int nrOfEdges = 3;  // The number of edges in the current level of the fractal
     private float hue;          // Hue value of color for next edge
     private boolean cancelled;  // Flag to indicate that calculation has been cancelled 
 
-    private void drawKochEdge(double ax, double ay, double bx, double by, int n) {
-        if (!cancelled) {
-            if (n == 1) {
+    private void drawKochEdge(double ax, double ay, double bx, double by, int n)
+    {
+        if (!cancelled)
+        {
+            if (n == 1)
+            {
                 hue = hue + 1.0f / nrOfEdges;
-                Edge e = new Edge(ax, ay, bx, by, Color.hsb(hue*360.0, 1.0, 1.0));
+                Edge e = new Edge(ax, ay, bx, by, Color.hsb(hue * 360.0, 1.0, 1.0));
                 this.setChanged();
                 this.notifyObservers(e);
-            } else {
+            }
+            else
+            {
                 double angle = Math.PI / 3.0 + Math.atan2(by - ay, bx - ax);
                 double distabdiv3 = Math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)) / 3;
                 double cx = Math.cos(angle) * distabdiv3 + (bx - ax) / 3 + ax;
@@ -40,48 +45,46 @@ public class KochFractal extends Observable {
             }
         }
     }
-    
-    public Edge generateLeftEdge() {
+
+    public void generateLeftEdge()
+    {
         hue = 0f;
-        hue = hue + 1.0f / nrOfEdges;
         cancelled = false;
-        Edge e = new Edge(0.5, 0.0, (1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, Color.hsb(hue*360.0, 1.0, 1.0));
-        return e;
-        //drawKochEdge(0.5, 0.0, (1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, level);
+        drawKochEdge(0.5, 0.0, (1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, level);
     }
 
-    public Edge generateBottomEdge() {
+    public void generateBottomEdge()
+    {
         hue = 1f / 3f;
-        hue = hue + 1.0f / nrOfEdges;
         cancelled = false;
-        Edge e = new Edge((1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, (1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, Color.hsb(hue*360.0, 1.0, 1.0));
-        return e;
-        //drawKochEdge((1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, (1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, level);
+        drawKochEdge((1 - Math.sqrt(3.0) / 2.0) / 2, 0.75, (1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, level);
     }
 
-    public Edge generateRightEdge() {
+    public void generateRightEdge()
+    {
         hue = 2f / 3f;
-        hue = hue + 1.0f / nrOfEdges;
         cancelled = false;
-        Edge e = new Edge((1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, 0.5, 0.0, Color.hsb(hue*360.0, 1.0, 1.0));
-        return e;
-        //drawKochEdge((1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, 0.5, 0.0, level);
+        drawKochEdge((1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, 0.5, 0.0, level);
     }
-    
-    public void cancel() {
+
+    public void cancel()
+    {
         cancelled = true;
     }
 
-    public void setLevel(int lvl) {
+    public void setLevel(int lvl)
+    {
         level = lvl;
         nrOfEdges = (int) (3 * Math.pow(4, level - 1));
     }
 
-    public int getLevel() {
+    public int getLevel()
+    {
         return level;
     }
 
-    public int getNrOfEdges() {
+    public int getNrOfEdges()
+    {
         return nrOfEdges;
     }
 }

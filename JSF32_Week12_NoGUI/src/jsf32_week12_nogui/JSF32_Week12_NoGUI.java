@@ -5,12 +5,19 @@
  */
 package jsf32_week12_nogui;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,11 +25,12 @@ import java.util.logging.Logger;
  *
  * @author Jelle
  */
-public class JSF32_Week12_NoGUI
+public class JSF32_Week12_NoGUI implements Observer
 {
 
     private KochFractal fractal = new KochFractal();
     private ArrayList<Edge> edges = new ArrayList<>();
+    private Integer level = 0;
 
     /**
      * @param args the command line arguments
@@ -36,71 +44,137 @@ public class JSF32_Week12_NoGUI
 
     public void start() throws IOException
     {
+        fractal.addObserver(this);
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(inputStreamReader);
         System.out.println("Voor welk level moeten de edges gegenereerd worden?");
         String input = reader.readLine();
         try
         {
-            Integer level = Integer.parseInt(input);
+            level = Integer.parseInt(input);
             if (level < 0)
             {
                 throw new NumberFormatException();
             }
 
-            generateEdge(level, 1);
-            generateEdge(level, 2);
-            generateEdge(level, 3);
-        } catch (NumberFormatException exc)
+            fractal.setLevel(level);
+
+            fractal.generateBottomEdge();
+            fractal.generateLeftEdge();
+            fractal.generateRightEdge();
+
+            writeTextFileNoBuffer();
+            writeTextFileWithBuffer();
+            writeBinaryFileNoBuffer();
+            writeBinaryFileWithBuffer();
+        }
+        catch (NumberFormatException exc)
         {
             System.err.println("Ongeldig level!");
         }
     }
 
-    public void generateEdge(int level, int edgeNumber)
-    {
-        fractal.setLevel(level);
-        switch (edgeNumber)
-        {
-            case 1:
-            {
-                edges.add(fractal.generateBottomEdge());
-                break;
-            }
-            case 2:
-            {
-                edges.add(fractal.generateLeftEdge());
-                break;
-            }
-            case 3:
-            {
-                edges.add(fractal.generateRightEdge());
-                break;
-            }
-        }
-        
-        writeEdges();
-    }
-
-    public void writeEdges()
+    public void writeTextFileNoBuffer()
     {
         FileWriter fw;
         try
         {
-            fw = new FileWriter("edges.txt");
+            fw = new FileWriter("textNoBuffer.txt");
             PrintWriter pr = new PrintWriter(fw);
-            
+
+            pr.println(level);
+
             for (Edge e : edges)
             {
                 pr.println(e.toString());
             }
-            
-            pr.close();
-            
-            System.out.println("De edges zijn opgeslagen!");
-        } catch (IOException ex)
-        {
 
+            pr.close();
+
+            System.out.println("De edges zijn opgeslagen in een text file zonder buffer!");
         }
+        catch (IOException ex)
+        {
+            System.err.println(ex.getMessage());
+        }
+
+    }
+
+    public void writeTextFileWithBuffer()
+    {
+        FileWriter fw;
+        BufferedWriter bw;
+        try
+        {
+            fw = new FileWriter("textWithBuffer.txt");
+            bw = new BufferedWriter(fw);
+
+            bw.write(level);
+
+            for (Edge e : edges)
+            {
+                bw.write(e.toString());
+            }
+
+            bw.close();
+
+            System.out.println("De edges zijn opgeslagen in een text file met buffer!");
+        }
+        catch (IOException ex)
+        {
+            System.err.println(ex.getMessage());
+        }
+    }
+
+    public void writeBinaryFileNoBuffer()
+    {
+        try
+        {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("binaryNoBuffer.dat"));
+
+            for (Edge e : edges)
+            {
+                out.writeObject(e);
+            }
+
+            out.close();
+
+            System.out.println("De edges zijn opgeslagen in een binary file zonder buffer!");
+        }
+        catch (IOException ioe)
+        {
+            System.err.println(ioe.getMessage());
+        }
+    }
+
+    public void writeBinaryFileWithBuffer()
+    {
+        try
+        {
+            FileOutputStream file = new FileOutputStream("binaryWithBuffer.dat");
+            BufferedOutputStream bos = new BufferedOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+
+            for (Edge e : edges)
+            {
+                out.writeObject(e);
+            }
+
+            out.flush();
+            out.close();
+
+            System.out.println("De edges zijn opgeslagen in een binary file met buffer!");
+        }
+        catch (IOException ioe)
+        {
+            System.err.println(ioe.getMessage());
+        }
+    }
+
+    @Override
+    public synchronized void update(Observable o, Object arg)
+    {
+        Edge e = (Edge) arg;
+        this.edges.add(e);
     }
 }
