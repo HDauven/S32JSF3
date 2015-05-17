@@ -28,6 +28,7 @@ public class JSF32_Week12_NoGUI implements Observer
     private KochFractal fractal = new KochFractal();
     private ArrayList<Edge> edges = new ArrayList<>();
     private Integer level = 0;
+    private TimeStamp ts = new TimeStamp();
 
     /**
      * @param args the command line arguments
@@ -79,6 +80,9 @@ public class JSF32_Week12_NoGUI implements Observer
             fw = new FileWriter("textNoBuffer.txt");
             PrintWriter pr = new PrintWriter(fw);
 
+            ts.init();
+            ts.setBegin("Start textNoBuffer");
+            
             pr.println(level);
 
             for (Edge e : edges)
@@ -87,8 +91,10 @@ public class JSF32_Week12_NoGUI implements Observer
             }
 
             pr.close();
+            
+            ts.setEnd("End textNoBuffer");
 
-            System.out.println("De edges zijn opgeslagen in een text file zonder buffer!");
+            System.out.println("De edges zijn opgeslagen in een text file zonder buffer! " + ts.toString());
         }
         catch (IOException ex)
         {
@@ -106,6 +112,9 @@ public class JSF32_Week12_NoGUI implements Observer
             fw = new FileWriter("textWithBuffer.txt");
             bw = new BufferedWriter(fw);
 
+            ts.init();
+            ts.setBegin("Start textWithBuffer");
+            
             bw.write(level);
 
             for (Edge e : edges)
@@ -114,8 +123,10 @@ public class JSF32_Week12_NoGUI implements Observer
             }
 
             bw.close();
+            
+            ts.setEnd("End textWithBuffer");
 
-            System.out.println("De edges zijn opgeslagen in een text file met buffer!");
+            System.out.println("De edges zijn opgeslagen in een text file met buffer! " + ts.toString());
         }
         catch (IOException ex)
         {
@@ -129,14 +140,19 @@ public class JSF32_Week12_NoGUI implements Observer
         {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("binaryNoBuffer.dat"));
 
+            ts.init();
+            ts.setBegin("Start binaryNoBuffer");
+            
             for (Edge e : edges)
             {
                 out.writeObject(e);
             }
 
             out.close();
+            
+            ts.setEnd("End binaryNoBuffer");
 
-            System.out.println("De edges zijn opgeslagen in een binary file zonder buffer!");
+            System.out.println("De edges zijn opgeslagen in een binary file zonder buffer! " + ts.toString());
         }
         catch (IOException ioe)
         {
@@ -152,6 +168,9 @@ public class JSF32_Week12_NoGUI implements Observer
             BufferedOutputStream bos = new BufferedOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(bos);
 
+            ts.init();
+            ts.setBegin("Start binaryWithBuffer");
+            
             for (Edge e : edges)
             {
                 out.writeObject(e);
@@ -159,8 +178,10 @@ public class JSF32_Week12_NoGUI implements Observer
 
             out.flush();
             out.close();
+            
+            ts.setEnd("End binaryWithBuffer");
 
-            System.out.println("De edges zijn opgeslagen in een binary file met buffer!");
+            System.out.println("De edges zijn opgeslagen in een binary file met buffer! " + ts.toString());
         }
         catch (IOException ioe)
         {
