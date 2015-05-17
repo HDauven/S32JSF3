@@ -115,7 +115,7 @@ public class JSF32_Week12_NoGUI implements Observer
             ts.init();
             ts.setBegin("Start textWithBuffer");
             
-            bw.write(level);
+            //bw.write(level);
 
             for (Edge e : edges)
             {
@@ -143,9 +143,12 @@ public class JSF32_Week12_NoGUI implements Observer
             ts.init();
             ts.setBegin("Start binaryNoBuffer");
             
+            out.write(level);
+            
             for (Edge e : edges)
             {
                 out.writeObject(e);
+                out.writeChars(e.getColorAsString());
             }
 
             out.close();

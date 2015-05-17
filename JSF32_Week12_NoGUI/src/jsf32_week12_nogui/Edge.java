@@ -26,9 +26,14 @@ public class Edge implements Serializable
         this.color = color;
     }
 
+    public String getColorAsString()
+    {
+        return this.color.toString();
+    }
+    
     @Override
     public String toString()
     {
-        return this.X1 + " , " + this.Y1 + " , " + this.X2 + " , " + this.Y2 + " , " + this.color.toString();
+        return this.X1 + "," + this.Y1 + "," + this.X2 + "," + this.Y2 + "," + this.color.toString();
     }
 }
