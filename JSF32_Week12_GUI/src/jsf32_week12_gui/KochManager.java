@@ -7,9 +7,11 @@ package jsf32_week12_gui;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.BrokenBarrierException;
@@ -132,9 +134,13 @@ public class KochManager
             int counter = 0;
             try
             {
-                while (inputScanner.hasNextLine())
+                while (inputScanner.hasNext())
                 {
-                    String regel = inputScanner.nextLine();
+                    String regel = inputScanner.next();
+                    System.out.println(regel);
+
+                    level = regel.substring(0, 1);
+                    System.out.println(level);
 
                     String[] parameters = regel.split(",");
                     for (int i = 4; i < parameters.length; i = i + 4)
@@ -143,9 +149,10 @@ public class KochManager
                         double Y1 = Double.valueOf(parameters[i - 3]);
                         double X2 = Double.valueOf(parameters[i - 2]);
                         double Y2 = Double.valueOf(parameters[i - 1]);
-                        Color color = Color.valueOf(parameters[i]);
-                        Edge edge = new Edge(X1, Y1, X2, Y2, color);
-                        application.drawEdge(edge);
+                        System.out.println(parameters[i]);
+                        //Color color = Color.valueOf(parameters[i]);
+                        //Edge edge = new Edge(X1, Y1, X2, Y2, color);
+                        //application.drawEdge(edge);
                     }
 
                     lineNumber++;
@@ -165,6 +172,33 @@ public class KochManager
                 inputScanner.close();
             }
 
+        }
+
+        else if (application.getBinaryNoBuffer())
+        {
+            FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryNoBuffer.dat");
+            ObjectInputStream in = new ObjectInputStream(fs);
+            Edge edge = null;
+            try
+            {
+                while (in.read() != -1)
+                {
+                    edge = (Edge) in.readObject();
+                    edge.color = null;
+                    System.out.println(in.readChar());
+                    
+                    System.out.println(edge.toString());
+                }
+
+            }
+            catch (IOException | ClassNotFoundException ioe)
+            {
+                ioe.printStackTrace();
+            }
+            finally
+            {
+                in.close();
+            }
         }
     }
 }
