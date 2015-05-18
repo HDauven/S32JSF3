@@ -34,7 +34,6 @@ public class KochManager
     private TimeStamp tsDraw;                   //TimeStamp voor het tekenen van de edges.
     private int count = 0;
     private ExecutorService pool = Executors.newFixedThreadPool(3);
-    private CyclicBarrier cb;
     private Task<ArrayList<Edge>> task1 = null;
     private Task<ArrayList<Edge>> task2 = null;
     private Task<ArrayList<Edge>> task3 = null;
@@ -111,7 +110,7 @@ public class KochManager
                 }
 
                 application.labelLevel.setText("Level: " + level);
-                application.setTextNrOfEdges(String.valueOf(lineNumber - 1));
+                application.setTextNrOfEdges(String.valueOf(lineNumber - 2));
 
             }
             catch (Exception e)

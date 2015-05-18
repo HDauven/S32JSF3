@@ -64,6 +64,7 @@ public class KochFractal extends Observable
     {
         hue = 2f / 3f;
         cancelled = false;
+        drawKochEdge((1 + Math.sqrt(3.0) / 2.0) / 2, 0.75, 0.5, 0.0, level);
     }
 
     public void cancel()

@@ -163,14 +163,14 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     increaseLevelButtonActionPerformed(event);
-                }
-                catch (InterruptedException | ExecutionException | BrokenBarrierException ex)
+                } catch (InterruptedException | ExecutionException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
         grid.add(buttonIncreaseLevel, 3, 6);
+        buttonIncreaseLevel.setDisable(true);
 
         // Button to decrease level of Koch fractal
         Button buttonDecreaseLevel = new Button();
@@ -183,14 +183,14 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     decreaseLevelButtonActionPerformed(event);
-                }
-                catch (InterruptedException | ExecutionException | BrokenBarrierException ex)
+                } catch (InterruptedException | ExecutionException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
         grid.add(buttonDecreaseLevel, 5, 6);
+        buttonDecreaseLevel.setDisable(true);
 
         // Progress bars
         progressLeft = new ProgressBar();
@@ -216,18 +216,17 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     fitFractalButtonActionPerformed(event);
-                }
-                catch (InterruptedException | BrokenBarrierException ex)
+                } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (IOException ex)
+                } catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
         grid.add(buttonFitFractal, 10, 6);
+        buttonFitFractal.setDisable(true);
 
         CheckBox cbTextNoBuffer = new CheckBox();
         cbTextNoBuffer.setText("Textfile zonder buffer");
@@ -243,12 +242,10 @@ public class JSF32_Week12_GUI extends Application
                     binaryNoBuffer = false;
                     binaryWithBuffer = false;
                     kochManager.drawEdges();
-                }
-                catch (InterruptedException | BrokenBarrierException ex)
+                } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (IOException ex)
+                } catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -272,12 +269,10 @@ public class JSF32_Week12_GUI extends Application
                     binaryNoBuffer = false;
                     binaryWithBuffer = false;
                     kochManager.drawEdges();
-                }
-                catch (InterruptedException | BrokenBarrierException ex)
+                } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (IOException ex)
+                } catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -301,12 +296,10 @@ public class JSF32_Week12_GUI extends Application
                     textNoBuffer = false;
                     textWithBuffer = false;
                     kochManager.drawEdges();
-                }
-                catch (InterruptedException | BrokenBarrierException ex)
+                } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (IOException ex)
+                } catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -330,8 +323,7 @@ public class JSF32_Week12_GUI extends Application
                     textNoBuffer = false;
                     textWithBuffer = false;
                     kochManager.drawEdges();
-                }
-                catch (InterruptedException | BrokenBarrierException | IOException ex)
+                } catch (InterruptedException | BrokenBarrierException | IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -361,12 +353,10 @@ public class JSF32_Week12_GUI extends Application
                         try
                         {
                             kochPanelMouseClicked(event);
-                        }
-                        catch (InterruptedException | BrokenBarrierException ex)
+                        } catch (InterruptedException | BrokenBarrierException ex)
                         {
                             Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        catch (IOException ex)
+                        } catch (IOException ex)
                         {
                             Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -393,12 +383,10 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     kochPanelMouseDragged(event);
-                }
-                catch (InterruptedException | BrokenBarrierException ex)
+                } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (IOException ex)
+                } catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -449,12 +437,10 @@ public class JSF32_Week12_GUI extends Application
                 if (currentLevel <= 3)
                 {
                     gc.setLineWidth(2.0);
-                }
-                else if (currentLevel <= 5)
+                } else if (currentLevel <= 5)
                 {
                     gc.setLineWidth(1.5);
-                }
-                else
+                } else
                 {
                     gc.setLineWidth(1.0);
                 }
@@ -503,12 +489,10 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     kochManager.drawEdges();
-                }
-                catch (InterruptedException | BrokenBarrierException ex)
+                } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (IOException ex)
+                } catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -554,8 +538,7 @@ public class JSF32_Week12_GUI extends Application
             if (event.getButton() == MouseButton.PRIMARY)
             {
                 zoom *= 2.0;
-            }
-            else if (event.getButton() == MouseButton.SECONDARY)
+            } else if (event.getButton() == MouseButton.SECONDARY)
             {
                 zoom /= 2.0;
             }
