@@ -86,6 +86,7 @@ public class KochManager
 
         if (application.getTextNoBuffer())
         {
+            lineNumber = 1;
             FileReader fr = new FileReader(System.getProperty("user.dir") + "/textNoBuffer.txt");
             Scanner inputScanner = new Scanner(fr);
             try
@@ -151,7 +152,6 @@ public class KochManager
                         double X2 = Double.valueOf(parameters[i - 2]);
                         double Y2 = Double.valueOf(parameters[i - 1]);
                         String kleur = parameters[i];
-                        System.out.println(kleur);
                         Color color = Color.valueOf(kleur);
                         Edge edge = new Edge(X1, Y1, X2, Y2, color);
                         application.drawEdge(edge);

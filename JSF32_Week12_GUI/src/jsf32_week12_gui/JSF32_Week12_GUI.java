@@ -171,7 +171,6 @@ public class JSF32_Week12_GUI extends Application
 //        });
 //        grid.add(buttonIncreaseLevel, 3, 6);
 //        buttonIncreaseLevel.setDisable(true);
-
         // Button to decrease level of Koch fractal
 //        Button buttonDecreaseLevel = new Button();
 //        buttonDecreaseLevel.setText("Decrease Level");
@@ -191,7 +190,6 @@ public class JSF32_Week12_GUI extends Application
 //        });
 //        grid.add(buttonDecreaseLevel, 5, 6);
 //        buttonDecreaseLevel.setDisable(true);
-
         // Progress bars
         progressLeft = new ProgressBar();
         progressLeft.setProgress(0);
@@ -227,7 +225,6 @@ public class JSF32_Week12_GUI extends Application
 //        });
 //        grid.add(buttonFitFractal, 10, 6);
 //        buttonFitFractal.setDisable(true);
-
         CheckBox cbTextNoBuffer = new CheckBox();
         cbTextNoBuffer.setText("Textfile zonder buffer");
         cbTextNoBuffer.setOnAction(new EventHandler<ActionEvent>()
@@ -237,11 +234,18 @@ public class JSF32_Week12_GUI extends Application
             {
                 try
                 {
-                    textNoBuffer = true;
-                    textWithBuffer = false;
-                    binaryNoBuffer = false;
-                    binaryWithBuffer = false;
-                    kochManager.drawEdges();
+                    if (cbTextNoBuffer.isSelected())
+                    {
+                        textNoBuffer = true;
+                        textWithBuffer = false;
+                        binaryNoBuffer = false;
+                        binaryWithBuffer = false;
+                        kochManager.drawEdges();
+                    } else
+                    {
+                        clearKochPanel();
+                        textNoBuffer = false;
+                    }
                 } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -264,11 +268,19 @@ public class JSF32_Week12_GUI extends Application
             {
                 try
                 {
-                    textWithBuffer = true;
-                    textNoBuffer = false;
-                    binaryNoBuffer = false;
-                    binaryWithBuffer = false;
-                    kochManager.drawEdges();
+                    if (cbTextWithBuffer.isSelected())
+                    {
+                        textWithBuffer = true;
+                        textNoBuffer = false;
+                        binaryNoBuffer = false;
+                        binaryWithBuffer = false;
+                        kochManager.drawEdges();
+                    } else
+                    {
+                        clearKochPanel();
+                        textWithBuffer = false;
+                    }
+
                 } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -291,11 +303,18 @@ public class JSF32_Week12_GUI extends Application
             {
                 try
                 {
-                    binaryNoBuffer = true;
-                    binaryWithBuffer = false;
-                    textNoBuffer = false;
-                    textWithBuffer = false;
-                    kochManager.drawEdges();
+                    if (cbBinaryNoBuffer.isSelected())
+                    {
+                        binaryNoBuffer = true;
+                        binaryWithBuffer = false;
+                        textNoBuffer = false;
+                        textWithBuffer = false;
+                        kochManager.drawEdges();
+                    } else
+                    {
+                        clearKochPanel();
+                        binaryNoBuffer = false;
+                    }
                 } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -318,11 +337,19 @@ public class JSF32_Week12_GUI extends Application
             {
                 try
                 {
-                    binaryWithBuffer = true;
-                    binaryNoBuffer = false;
-                    textNoBuffer = false;
-                    textWithBuffer = false;
-                    kochManager.drawEdges();
+                    if (cbBinaryWithBuffer.isSelected())
+                    {
+                        binaryWithBuffer = true;
+                        binaryNoBuffer = false;
+                        textNoBuffer = false;
+                        textWithBuffer = false;
+                        kochManager.drawEdges();
+                    }
+                    else
+                    {
+                        clearKochPanel();
+                        binaryWithBuffer = false;
+                    }
                 } catch (InterruptedException | BrokenBarrierException | IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
