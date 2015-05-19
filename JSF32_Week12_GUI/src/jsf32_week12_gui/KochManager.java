@@ -180,21 +180,18 @@ public class KochManager
             Edge edge = null;
             try
             {
-                while (in.read() != 1)
-                {
-                    //System.out.println(in.readObject());
-                    edge = (Edge) in.readObject();
-                    System.out.println(edge.toString());
-                    edge.color = Color.valueOf(edge.colorValue);
+                //System.out.println(in.readObject());
+                edge = (Edge) in.readObject();
+                System.out.println(edge.toString());
+                edge.color = Color.valueOf(edge.colorValue);
+                application.drawEdge(edge);
 //                    String input = in.readLine();
 //                    System.out.println(input);
-                    //edge = (Edge) in.readObject();
-                    //edge.color = null;
-                    //System.out.println(in.readChar());
+                //edge = (Edge) in.readObject();
+                //edge.color = null;
+                //System.out.println(in.readChar());
 
-                    //System.out.println(edge.toString());
-                }
-
+                //System.out.println(edge.toString());
             } catch (Exception ioe)
             {
                 Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ioe);
@@ -205,14 +202,28 @@ public class KochManager
         } else if (application.getBinaryWithBuffer())
         {
             FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryWithBuffer.dat");
-            DataInputStream in = new DataInputStream(fs);
-            BufferedInputStream bis = new BufferedInputStream(in);
-            Scanner is = new Scanner(bis);
+            ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fs));
             Edge edge = null;
-            while (is.hasNext())
+            boolean loop = true;
+            try
             {
-                String regel = is.nextLine();
-                System.out.println(regel);
+                while (loop)
+                {
+                    edge = (Edge) in.readObject();
+                    if (in.available() < 1)
+                    {
+                        loop = false;
+                    }
+                    edge.color = Color.valueOf(edge.colorValue);
+                    edges.add(edge);
+                }
+                for (Edge e : edges)
+                {
+                    application.drawEdge(e);
+                }
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
