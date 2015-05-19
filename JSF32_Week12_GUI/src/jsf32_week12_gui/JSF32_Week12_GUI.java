@@ -253,7 +253,7 @@ public class JSF32_Week12_GUI extends Application
 
         });
 
-        grid.add(cbTextNoBuffer, 10, 4);
+        grid.add(cbTextNoBuffer, 0, 4);
 
         CheckBox cbTextWithBuffer = new CheckBox();
         cbTextWithBuffer.setText("Textfile met buffer");
@@ -280,7 +280,7 @@ public class JSF32_Week12_GUI extends Application
 
         });
 
-        grid.add(cbTextWithBuffer, 10, 6);
+        grid.add(cbTextWithBuffer, 2, 4);
 
         CheckBox cbBinaryNoBuffer = new CheckBox();
         cbBinaryNoBuffer.setText("Binary zonder buffer");
@@ -307,7 +307,7 @@ public class JSF32_Week12_GUI extends Application
 
         });
 
-        grid.add(cbBinaryNoBuffer, 10, 8);
+        grid.add(cbBinaryNoBuffer, 4, 4);
 
         CheckBox cbBinaryWithBuffer = new CheckBox();
         cbBinaryWithBuffer.setText("Binary met buffer");
@@ -331,7 +331,7 @@ public class JSF32_Week12_GUI extends Application
 
         });
 
-        grid.add(cbBinaryWithBuffer, 10, 10);
+        grid.add(cbBinaryWithBuffer, 5, 4);
 
         // Label progress number of edges
         labelEdgesLeft = new Label("Nr edges: ");

@@ -8,6 +8,7 @@ package jsf32_week12_nogui;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -148,12 +149,11 @@ public class JSF32_Week12_NoGUI implements Observer
             ts.init();
             ts.setBegin("Start binaryNoBuffer");
 
-            out.write(level);
+            //out.write(level);
 
             for (Edge e : edges)
             {
                 out.writeObject(e);
-                out.writeChars(e.getColorAsString());
             }
 
             out.flush();
@@ -200,6 +200,7 @@ public class JSF32_Week12_NoGUI implements Observer
     public synchronized void update(Observable o, Object arg)
     {
         Edge e = (Edge) arg;
+        e.colorValue = e.color.toString();
         this.edges.add(e);
     }
 }

@@ -7,6 +7,7 @@ package jsf32_week12_gui;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,6 +20,8 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 
@@ -101,7 +104,6 @@ public class KochManager
                         double Y1 = Double.valueOf(parameters[1]);
                         double X2 = Double.valueOf(parameters[2]);
                         double Y2 = Double.valueOf(parameters[3]);
-                        System.out.println(parameters[4]);
                         Color color = Color.valueOf(parameters[4]);
                         Edge edge = new Edge(X1, Y1, X2, Y2, color);
                         application.drawEdge(edge);
@@ -142,27 +144,28 @@ public class KochManager
                     System.out.println(level);
 
                     String[] parameters = regel.split(",");
-                    for (int i = 4; i < parameters.length; i = i + 4)
+                    for (int i = 4; i < parameters.length; i = i + 5)
                     {
                         double X1 = Double.valueOf(parameters[i - 4]);
                         double Y1 = Double.valueOf(parameters[i - 3]);
                         double X2 = Double.valueOf(parameters[i - 2]);
                         double Y2 = Double.valueOf(parameters[i - 1]);
-                        String kleur = parameters[i].substring(0, parameters[i].indexOf(".") - 1);
+                        String kleur = parameters[i];
                         System.out.println(kleur);
                         Color color = Color.valueOf(kleur);
                         Edge edge = new Edge(X1, Y1, X2, Y2, color);
                         application.drawEdge(edge);
+                        counter++;
                     }
 
                     lineNumber++;
                 }
 
                 application.labelLevel.setText("Level: " + level);
-                application.setTextNrOfEdges(String.valueOf(br.lines().count()));
+                application.setTextNrOfEdges(String.valueOf(counter));
             } catch (Exception e)
             {
-                System.out.println(e.getMessage());
+                Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, e);
             } finally
             {
                 fr.close();
@@ -177,21 +180,39 @@ public class KochManager
             Edge edge = null;
             try
             {
-                while (in.readObject() != null)
+                while (in.read() != 1)
                 {
+                    //System.out.println(in.readObject());
                     edge = (Edge) in.readObject();
-                    edge.color = null;
-                    System.out.println(in.readChar());
-
                     System.out.println(edge.toString());
+                    edge.color = Color.valueOf(edge.colorValue);
+//                    String input = in.readLine();
+//                    System.out.println(input);
+                    //edge = (Edge) in.readObject();
+                    //edge.color = null;
+                    //System.out.println(in.readChar());
+
+                    //System.out.println(edge.toString());
                 }
 
-            } catch (IOException | ClassNotFoundException ioe)
+            } catch (Exception ioe)
             {
-                System.out.println(ioe.getMessage());
+                Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ioe);
             } finally
             {
                 in.close();
+            }
+        } else if (application.getBinaryWithBuffer())
+        {
+            FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryWithBuffer.dat");
+            DataInputStream in = new DataInputStream(fs);
+            BufferedInputStream bis = new BufferedInputStream(in);
+            Scanner is = new Scanner(bis);
+            Edge edge = null;
+            while (is.hasNext())
+            {
+                String regel = is.nextLine();
+                System.out.println(regel);
             }
         }
     }
