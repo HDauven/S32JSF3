@@ -153,44 +153,44 @@ public class JSF32_Week12_GUI extends Application
         grid.add(labelProgressRight, 0, 12);
 
         // Button to increase level of Koch fractal
-        Button buttonIncreaseLevel = new Button();
-        buttonIncreaseLevel.setText("Increase Level");
-        buttonIncreaseLevel.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                try
-                {
-                    increaseLevelButtonActionPerformed(event);
-                } catch (InterruptedException | ExecutionException | BrokenBarrierException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        grid.add(buttonIncreaseLevel, 3, 6);
-        buttonIncreaseLevel.setDisable(true);
+//        Button buttonIncreaseLevel = new Button();
+//        buttonIncreaseLevel.setText("Increase Level");
+//        buttonIncreaseLevel.setOnAction(new EventHandler<ActionEvent>()
+//        {
+//            @Override
+//            public void handle(ActionEvent event)
+//            {
+//                try
+//                {
+//                    increaseLevelButtonActionPerformed(event);
+//                } catch (InterruptedException | ExecutionException | BrokenBarrierException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        });
+//        grid.add(buttonIncreaseLevel, 3, 6);
+//        buttonIncreaseLevel.setDisable(true);
 
         // Button to decrease level of Koch fractal
-        Button buttonDecreaseLevel = new Button();
-        buttonDecreaseLevel.setText("Decrease Level");
-        buttonDecreaseLevel.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                try
-                {
-                    decreaseLevelButtonActionPerformed(event);
-                } catch (InterruptedException | ExecutionException | BrokenBarrierException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        grid.add(buttonDecreaseLevel, 5, 6);
-        buttonDecreaseLevel.setDisable(true);
+//        Button buttonDecreaseLevel = new Button();
+//        buttonDecreaseLevel.setText("Decrease Level");
+//        buttonDecreaseLevel.setOnAction(new EventHandler<ActionEvent>()
+//        {
+//            @Override
+//            public void handle(ActionEvent event)
+//            {
+//                try
+//                {
+//                    decreaseLevelButtonActionPerformed(event);
+//                } catch (InterruptedException | ExecutionException | BrokenBarrierException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        });
+//        grid.add(buttonDecreaseLevel, 5, 6);
+//        buttonDecreaseLevel.setDisable(true);
 
         // Progress bars
         progressLeft = new ProgressBar();
@@ -206,27 +206,27 @@ public class JSF32_Week12_GUI extends Application
         grid.add(progressRight, 5, 12);
 
         // Button to fit Koch fractal in Koch panel
-        Button buttonFitFractal = new Button();
-        buttonFitFractal.setText("Fit Fractal");
-        buttonFitFractal.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                try
-                {
-                    fitFractalButtonActionPerformed(event);
-                } catch (InterruptedException | BrokenBarrierException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-        grid.add(buttonFitFractal, 10, 6);
-        buttonFitFractal.setDisable(true);
+//        Button buttonFitFractal = new Button();
+//        buttonFitFractal.setText("Fit Fractal");
+//        buttonFitFractal.setOnAction(new EventHandler<ActionEvent>()
+//        {
+//            @Override
+//            public void handle(ActionEvent event)
+//            {
+//                try
+//                {
+//                    fitFractalButtonActionPerformed(event);
+//                } catch (InterruptedException | BrokenBarrierException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (IOException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        });
+//        grid.add(buttonFitFractal, 10, 6);
+//        buttonFitFractal.setDisable(true);
 
         CheckBox cbTextNoBuffer = new CheckBox();
         cbTextNoBuffer.setText("Textfile zonder buffer");
@@ -253,7 +253,7 @@ public class JSF32_Week12_GUI extends Application
 
         });
 
-        grid.add(cbTextNoBuffer, 10, 8);
+        grid.add(cbTextNoBuffer, 10, 4);
 
         CheckBox cbTextWithBuffer = new CheckBox();
         cbTextWithBuffer.setText("Textfile met buffer");
@@ -280,7 +280,7 @@ public class JSF32_Week12_GUI extends Application
 
         });
 
-        grid.add(cbTextWithBuffer, 10, 10);
+        grid.add(cbTextWithBuffer, 10, 6);
 
         CheckBox cbBinaryNoBuffer = new CheckBox();
         cbBinaryNoBuffer.setText("Binary zonder buffer");
@@ -307,7 +307,7 @@ public class JSF32_Week12_GUI extends Application
 
         });
 
-        grid.add(cbBinaryNoBuffer, 10, 12);
+        grid.add(cbBinaryNoBuffer, 10, 8);
 
         CheckBox cbBinaryWithBuffer = new CheckBox();
         cbBinaryWithBuffer.setText("Binary met buffer");
@@ -331,7 +331,7 @@ public class JSF32_Week12_GUI extends Application
 
         });
 
-        grid.add(cbBinaryWithBuffer, 10, 14);
+        grid.add(cbBinaryWithBuffer, 10, 10);
 
         // Label progress number of edges
         labelEdgesLeft = new Label("Nr edges: ");

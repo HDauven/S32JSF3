@@ -94,14 +94,14 @@ public class KochManager
                     if (lineNumber == 1)
                     {
                         level = regel;
-                    }
-                    else
+                    } else
                     {
                         String[] parameters = regel.split(",");
                         double X1 = Double.valueOf(parameters[0]);
                         double Y1 = Double.valueOf(parameters[1]);
                         double X2 = Double.valueOf(parameters[2]);
                         double Y2 = Double.valueOf(parameters[3]);
+                        System.out.println(parameters[4]);
                         Color color = Color.valueOf(parameters[4]);
                         Edge edge = new Edge(X1, Y1, X2, Y2, color);
                         application.drawEdge(edge);
@@ -114,19 +114,15 @@ public class KochManager
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(lineNumber - 2));
 
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 e.printStackTrace();
-            }
-            finally
+            } finally
             {
                 fr.close();
                 inputScanner.close();
             }
-        }
-
-        else if (application.getTextWithBuffer())
+        } else if (application.getTextWithBuffer())
         {
             FileReader fr = new FileReader(System.getProperty("user.dir") + "/textWithBuffer.txt");
             BufferedReader br = new BufferedReader(fr);
@@ -137,9 +133,12 @@ public class KochManager
                 while (inputScanner.hasNext())
                 {
                     String regel = inputScanner.next();
+                    StringBuilder sb = new StringBuilder(regel);
                     System.out.println(regel);
 
                     level = regel.substring(0, 1);
+                    sb.deleteCharAt(0);
+                    regel = sb.toString();
                     System.out.println(level);
 
                     String[] parameters = regel.split(",");
@@ -149,10 +148,11 @@ public class KochManager
                         double Y1 = Double.valueOf(parameters[i - 3]);
                         double X2 = Double.valueOf(parameters[i - 2]);
                         double Y2 = Double.valueOf(parameters[i - 1]);
-                        System.out.println(parameters[i]);
-                        //Color color = Color.valueOf(parameters[i]);
-                        //Edge edge = new Edge(X1, Y1, X2, Y2, color);
-                        //application.drawEdge(edge);
+                        String kleur = parameters[i].substring(0, parameters[i].indexOf(".") - 1);
+                        System.out.println(kleur);
+                        Color color = Color.valueOf(kleur);
+                        Edge edge = new Edge(X1, Y1, X2, Y2, color);
+                        application.drawEdge(edge);
                     }
 
                     lineNumber++;
@@ -160,42 +160,36 @@ public class KochManager
 
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(br.lines().count()));
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
-
-            }
-            finally
+                System.out.println(e.getMessage());
+            } finally
             {
                 fr.close();
                 br.close();
                 inputScanner.close();
             }
 
-        }
-
-        else if (application.getBinaryNoBuffer())
+        } else if (application.getBinaryNoBuffer())
         {
             FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryNoBuffer.dat");
             ObjectInputStream in = new ObjectInputStream(fs);
             Edge edge = null;
             try
             {
-                while (in.read() != -1)
+                while (in.readObject() != null)
                 {
                     edge = (Edge) in.readObject();
                     edge.color = null;
                     System.out.println(in.readChar());
-                    
+
                     System.out.println(edge.toString());
                 }
 
-            }
-            catch (IOException | ClassNotFoundException ioe)
+            } catch (IOException | ClassNotFoundException ioe)
             {
-                ioe.printStackTrace();
-            }
-            finally
+                System.out.println(ioe.getMessage());
+            } finally
             {
                 in.close();
             }
