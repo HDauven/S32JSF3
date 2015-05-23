@@ -143,6 +143,7 @@ public class JSF31KochFractalFX extends Application
             }
         });
         grid.add(buttonIncreaseLevel, 3, 6);
+        
 
         // Button to decrease level of Koch fractal
         Button buttonDecreaseLevel = new Button();
