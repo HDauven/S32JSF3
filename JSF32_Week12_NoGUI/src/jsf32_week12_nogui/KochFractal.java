@@ -26,7 +26,7 @@ public class KochFractal extends Observable
             if (n == 1)
             {
                 hue = hue + 1.0f / nrOfEdges;
-                Edge e = new Edge(ax, ay, bx, by, Color.hsb(hue * 360.0, 1.0, 1.0));
+                Edge e = new Edge(ax, ay, bx, by, Color.hsb(hue * 360.0, 1.0, 1.0), level);
                 this.setChanged();
                 this.notifyObservers(e);
             }

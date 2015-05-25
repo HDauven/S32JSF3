@@ -8,6 +8,7 @@ package jsf32_week12_gui;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -24,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
+import jsf32_week12_nogui.Edge;
 
 /**
  *
@@ -98,7 +100,8 @@ public class KochManager
                     if (lineNumber == 1)
                     {
                         level = regel;
-                    } else
+                    }
+                    else
                     {
                         String[] parameters = regel.split(",");
                         double X1 = Double.valueOf(parameters[0]);
@@ -106,7 +109,7 @@ public class KochManager
                         double X2 = Double.valueOf(parameters[2]);
                         double Y2 = Double.valueOf(parameters[3]);
                         Color color = Color.valueOf(parameters[4]);
-                        Edge edge = new Edge(X1, Y1, X2, Y2, color);
+                        Edge edge = new Edge(X1, Y1, X2, Y2, color, Integer.valueOf(level));
                         application.drawEdge(edge);
 
                     }
@@ -117,15 +120,18 @@ public class KochManager
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(lineNumber - 2));
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 e.printStackTrace();
-            } finally
+            }
+            finally
             {
                 fr.close();
                 inputScanner.close();
             }
-        } else if (application.getTextWithBuffer())
+        }
+        else if (application.getTextWithBuffer())
         {
             FileReader fr = new FileReader(System.getProperty("user.dir") + "/textWithBuffer.txt");
             BufferedReader br = new BufferedReader(fr);
@@ -153,7 +159,7 @@ public class KochManager
                         double Y2 = Double.valueOf(parameters[i - 1]);
                         String kleur = parameters[i];
                         Color color = Color.valueOf(kleur);
-                        Edge edge = new Edge(X1, Y1, X2, Y2, color);
+                        Edge edge = new Edge(X1, Y1, X2, Y2, color, Integer.valueOf(level));
                         application.drawEdge(edge);
                         counter++;
                     }
@@ -163,67 +169,75 @@ public class KochManager
 
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(counter));
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, e);
-            } finally
+            }
+            finally
             {
                 fr.close();
                 br.close();
                 inputScanner.close();
             }
 
-        } else if (application.getBinaryNoBuffer())
+        }
+        else if (application.getBinaryNoBuffer())
         {
             FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryNoBuffer.dat");
             ObjectInputStream in = new ObjectInputStream(fs);
             Edge edge = null;
+            int levelEdge = 0, counter = 0;
             try
             {
-                //System.out.println(in.readObject());
-                edge = (Edge) in.readObject();
-                System.out.println(edge.toString());
-                edge.color = Color.valueOf(edge.colorValue);
-                application.drawEdge(edge);
-//                    String input = in.readLine();
-//                    System.out.println(input);
-                //edge = (Edge) in.readObject();
-                //edge.color = null;
-                //System.out.println(in.readChar());
+                while (true)
+                {
+                    edge = (Edge) in.readObject();
+                    edge.color = Color.valueOf(edge.colorValue);
+                    levelEdge = edge.level;
+                    System.out.println(edge.X1 + " " + edge.Y1 + " " + edge.X2 + " " + edge.Y2 + " " + edge.color.toString() + " " + edge.level);
+                    application.drawEdge(edge);
+                    counter++;
+                }
 
-                //System.out.println(edge.toString());
-            } catch (Exception ioe)
+            }
+            catch (Exception ioe)
             {
                 Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ioe);
-            } finally
+            }
+            finally
             {
                 in.close();
+                application.labelLevel.setText("Level: " + levelEdge);
+                application.setTextNrOfEdges(String.valueOf(counter));
             }
-        } else if (application.getBinaryWithBuffer())
+        }
+        else if (application.getBinaryWithBuffer())
         {
             FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryWithBuffer.dat");
             ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fs));
             Edge edge = null;
-            boolean loop = true;
+            int levelEdge = 0, counter = 0;
             try
             {
-                while (loop)
+                while (true)
                 {
                     edge = (Edge) in.readObject();
-                    if (in.available() < 1)
-                    {
-                        loop = false;
-                    }
                     edge.color = Color.valueOf(edge.colorValue);
-                    edges.add(edge);
+                    levelEdge = edge.level;
+                    application.drawEdge(edge);
+                    counter++;
                 }
-                for (Edge e : edges)
-                {
-                    application.drawEdge(e);
-                }
-            } catch (ClassNotFoundException ex)
+            }
+            catch (ClassNotFoundException ex)
             {
                 Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            finally
+            {
+                in.close();
+                application.labelLevel.setText("Level: " + levelEdge);
+                application.setTextNrOfEdges(String.valueOf(counter));
             }
         }
     }

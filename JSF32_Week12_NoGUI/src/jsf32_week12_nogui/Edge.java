@@ -17,23 +17,26 @@ public class Edge implements Serializable
     public double X1, Y1, X2, Y2;
     public transient Color color;
     public String colorValue;
+    public int level;
 
-    public Edge(double X1, double Y1, double X2, double Y2, Color color)
+    public Edge(double X1, double Y1, double X2, double Y2, Color color, int level)
     {
         this.X1 = X1;
         this.Y1 = Y1;
         this.X2 = X2;
         this.Y2 = Y2;
         this.color = color;
+        this.level = level;
     }
 
-    public Edge(double X1, double Y1, double X2, double Y2, String colorValue)
+    public Edge(double X1, double Y1, double X2, double Y2, String colorValue, int level)
     {
         this.X1 = X1;
         this.Y1 = Y1;
         this.X2 = X2;
         this.Y2 = Y2;
         this.colorValue = colorValue;
+        this.level = level;
     }
     
     public String getColorValue()

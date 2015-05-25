@@ -28,6 +28,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import jsf32_week12_nogui.Edge;
 
 /**
  *
@@ -607,7 +608,8 @@ public class JSF32_Week12_GUI extends Application
                 e.Y1 * zoom + zoomTranslateY,
                 e.X2 * zoom + zoomTranslateX,
                 e.Y2 * zoom + zoomTranslateY,
-                e.color);
+                e.color,
+                e.level);
     }
 
     /**
