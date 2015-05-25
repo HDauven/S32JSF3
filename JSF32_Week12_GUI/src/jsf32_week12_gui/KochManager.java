@@ -46,6 +46,7 @@ public class KochManager
     private Task<ArrayList<Edge>> task3 = null;
     private int lineNumber = 1;
     private String level = "0";
+    private TimeStamp ts = new TimeStamp();
 
     public KochManager(JSF32_Week12_GUI application)
     {
@@ -88,6 +89,8 @@ public class KochManager
 
         if (application.getTextNoBuffer())
         {
+            ts.init();
+            ts.setBegin("Start textNoBuffer");
             lineNumber = 1;
             FileReader fr = new FileReader(System.getProperty("user.dir") + "/textNoBuffer.txt");
             Scanner inputScanner = new Scanner(fr);
@@ -117,6 +120,10 @@ public class KochManager
                     lineNumber++;
                 }
 
+                ts.setEnd("End textNoBuffer");
+
+                System.out.println("De edges zijn ingelezen uit een text file zonder buffer! " + ts.toString());
+
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(lineNumber - 2));
 
@@ -139,6 +146,8 @@ public class KochManager
             int counter = 0;
             try
             {
+                ts.init();
+                ts.setBegin("Start textWithBuffer");
                 while (inputScanner.hasNext())
                 {
                     String regel = inputScanner.next();
@@ -167,6 +176,9 @@ public class KochManager
                     lineNumber++;
                 }
 
+                ts.setEnd("End textWithBuffer");
+
+                System.out.println("De edges zijn uitgelezen uit een text file met buffer! " + ts.toString());
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(counter));
             }
@@ -190,6 +202,8 @@ public class KochManager
             int levelEdge = 0, counter = 0;
             try
             {
+                ts.init();
+                ts.setBegin("Start binaryNoBuffer");
                 while (true)
                 {
                     edge = (Edge) in.readObject();
@@ -207,6 +221,9 @@ public class KochManager
             }
             finally
             {
+                ts.setEnd("End binaryNoBuffer");
+
+                System.out.println("De edges zijn uitgelezen uit een binary file zonder buffer! " + ts.toString());
                 in.close();
                 application.labelLevel.setText("Level: " + levelEdge);
                 application.setTextNrOfEdges(String.valueOf(counter));
@@ -220,6 +237,8 @@ public class KochManager
             int levelEdge = 0, counter = 0;
             try
             {
+                ts.init();
+                ts.setBegin("Start binaryWithBuffer");
                 while (true)
                 {
                     edge = (Edge) in.readObject();
@@ -235,6 +254,9 @@ public class KochManager
             }
             finally
             {
+                ts.setEnd("End binaryWithBuffer");
+
+                System.out.println("De edges zijn uitgelezen uit een binary file met buffer! " + ts.toString());
                 in.close();
                 application.labelLevel.setText("Level: " + levelEdge);
                 application.setTextNrOfEdges(String.valueOf(counter));
