@@ -18,6 +18,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
@@ -149,9 +150,10 @@ public class JSF32_Week12_NoGUI implements Observer
         {
             RandomAccessFile ras = new RandomAccessFile("binaryNoBuffer.dat", "rw");
             FileChannel fc = ras.getChannel();
-            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_WRITE, 0, fc.size());
+            int bytes = 60 * edges.size();
+            System.out.println(bytes);
+            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_WRITE, 0, bytes);
             out.position(0);
-            ByteBuffer buffer = null;
             //ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("binaryNoBuffer.dat"));
 
             ts.init();
@@ -164,8 +166,10 @@ public class JSF32_Week12_NoGUI implements Observer
                 out.putDouble(e.Y1);
                 out.putDouble(e.X2);
                 out.putDouble(e.Y2);
-                buffer = ByteBuffer.wrap(e.colorValue.getBytes());
-                out.put(buffer);
+                out.putDouble(e.color.getRed());
+                out.putDouble(e.color.getGreen());
+                out.putDouble(e.color.getBlue());
+                out.putInt(e.level);
             }
 
             ts.setEnd("End binaryNoBuffer");

@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -209,15 +210,22 @@ public class KochManager
             out.position(0);
             Edge edge = null;
             int levelEdge = 0, counter = 0;
-            String encoding = System.getProperty("file.encoding");
             try
             {
                 ts.init();
                 ts.setBegin("Start binaryNoBuffer");
                 while (out.hasRemaining())
                 {
-                    CharBuffer charbuffer = Charset.forName(encoding).decode(out);
-                    System.out.println(charbuffer.toString());
+                    double X1 = out.getDouble();
+                    double Y1 = out.getDouble();
+                    double X2 = out.getDouble();
+                    double Y2 = out.getDouble();
+                    double red = out.getDouble();
+                    double green = out.getDouble();
+                    double blue = out.getDouble();
+                    levelEdge = out.getInt();
+                    edge = new Edge(X1, Y1, X2, Y2, new Color(red, green, blue, 1), levelEdge);
+                    application.drawEdge(edge);
                     //System.out.println(out.getDouble());
                     //edge = (Edge) in.readObject();
                     //edge.color = Color.valueOf(edge.colorValue);
@@ -226,6 +234,8 @@ public class KochManager
                     //application.drawEdge(edge);
                     counter++;
                 }
+                
+                ts.setEnd("End binaryNoBuffer");
 
             }
             catch (Exception ioe)
@@ -234,8 +244,6 @@ public class KochManager
             }
             finally
             {
-                ts.setEnd("End binaryNoBuffer");
-
                 System.out.println("De edges zijn uitgelezen uit een binary file zonder buffer! " + ts.toString());
                 application.labelLevel.setText("Level: " + levelEdge);
                 application.setTextNrOfEdges(String.valueOf(counter));

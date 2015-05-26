@@ -209,7 +209,7 @@ public class KochManager
                     edge = (Edge) in.readObject();
                     edge.color = Color.valueOf(edge.colorValue);
                     levelEdge = edge.level;
-                    System.out.println(edge.X1 + " " + edge.Y1 + " " + edge.X2 + " " + edge.Y2 + " " + edge.color.toString() + " " + edge.level);
+                    //System.out.println(edge.X1 + " " + edge.Y1 + " " + edge.X2 + " " + edge.Y2 + " " + edge.color.toString() + " " + edge.level);
                     application.drawEdge(edge);
                     counter++;
                 }
