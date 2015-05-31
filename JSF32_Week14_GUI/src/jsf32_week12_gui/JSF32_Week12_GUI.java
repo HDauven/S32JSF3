@@ -456,8 +456,9 @@ public class JSF32_Week12_GUI extends Application
         primaryStage.setTitle("Koch Fractal");
         primaryStage.setScene(scene);
         primaryStage.show();
-        
         setupWatcher();
+        
+        
     }
 
     public void clearKochPanel()
@@ -653,32 +654,32 @@ public class JSF32_Week12_GUI extends Application
         launch(args);
     }
 
-    public void setupWatcher() throws IOException
+    public void setupWatcher()
     {
-        Path toWatch = Paths.get("C:\\Users\\Jelle\\Documents\\GitHub\\S32JSF3\\JSF32_Week14_NoGUI");
-        if (toWatch == null)
+        Path dir = Paths.get(System.getProperty("user.dir"));
+        dir = dir.getParent();
+        dir = Paths.get(dir.toString() + "/JSF32_Week14_NoGUI");
+        
+        System.out.println("Working Directory = " +
+              dir.toString());
+        if (dir == null)
         {
             throw new UnsupportedOperationException("Directory not found");
         }
 
-        // make a new watch service that we can register interest in 
-        // directories and files with.
-        WatchService myWatcher = toWatch.getFileSystem().newWatchService();
+        try {
+            // create WatchDirRunnable object to watch the given directory (and possibly recursive)
+            WatchDirRunnable watcher = new WatchDirRunnable(dir, false, kochManager);
+            
+            // create Thread and start watching
+            new Thread(watcher).start();
+            
 
-        // start the file watcher thread below
-        WatchQueueReader fileWatcher = new WatchQueueReader(myWatcher, this);
-        Thread th = new Thread(fileWatcher, "FileWatcher");
-        th.start();
-
-        // register a file
-        toWatch.register(myWatcher, ENTRY_CREATE, ENTRY_MODIFY);
-        try
-        {
-            th.join();
-        }
-        catch (InterruptedException ex)
-        {
+        } catch (IOException ex) {
             Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+            
+
     }
 }

@@ -20,6 +20,8 @@ import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.BrokenBarrierException;
@@ -286,7 +288,13 @@ public class KochManager
 
     public void drawBinaryWithBuffer() throws FileNotFoundException, IOException
     {
-        FileInputStream fs = new FileInputStream("C:\\Users\\Jelle\\Documents\\GitHub\\S32JSF3\\JSF32_Week14_NoGUI\\binaryWithBuffer.dat");
+        application.clearKochPanel();
+        Path dir = Paths.get(System.getProperty("user.dir"));
+        dir = dir.getParent();
+        dir = Paths.get(dir.toString() + "/JSF32_Week14_NoGUI");
+        String file = dir.toString() + "/binaryWithBuffer.dat";
+        
+        FileInputStream fs = new FileInputStream(file);
         ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fs));
         Edge edge = null;
         int levelEdge = 0, counter = 0;
