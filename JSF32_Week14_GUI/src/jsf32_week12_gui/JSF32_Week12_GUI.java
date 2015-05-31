@@ -5,6 +5,13 @@
 package jsf32_week12_gui;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import static java.nio.file.StandardWatchEventKinds.*;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -104,7 +111,7 @@ public class JSF32_Week12_GUI extends Application
     }
 
     @Override
-    public void start(Stage primaryStage) throws InterruptedException, ExecutionException, BrokenBarrierException
+    public void start(Stage primaryStage) throws InterruptedException, ExecutionException, BrokenBarrierException, IOException
     {
 
         // Define grid pane
@@ -242,15 +249,18 @@ public class JSF32_Week12_GUI extends Application
                         binaryNoBuffer = false;
                         binaryWithBuffer = false;
                         kochManager.drawEdges();
-                    } else
+                    }
+                    else
                     {
                         clearKochPanel();
                         textNoBuffer = false;
                     }
-                } catch (InterruptedException | BrokenBarrierException ex)
+                }
+                catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
+                }
+                catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -276,16 +286,19 @@ public class JSF32_Week12_GUI extends Application
                         binaryNoBuffer = false;
                         binaryWithBuffer = false;
                         kochManager.drawEdges();
-                    } else
+                    }
+                    else
                     {
                         clearKochPanel();
                         textWithBuffer = false;
                     }
 
-                } catch (InterruptedException | BrokenBarrierException ex)
+                }
+                catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
+                }
+                catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -311,15 +324,18 @@ public class JSF32_Week12_GUI extends Application
                         textNoBuffer = false;
                         textWithBuffer = false;
                         kochManager.drawEdges();
-                    } else
+                    }
+                    else
                     {
                         clearKochPanel();
                         binaryNoBuffer = false;
                     }
-                } catch (InterruptedException | BrokenBarrierException ex)
+                }
+                catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
+                }
+                catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -351,7 +367,8 @@ public class JSF32_Week12_GUI extends Application
                         clearKochPanel();
                         binaryWithBuffer = false;
                     }
-                } catch (InterruptedException | BrokenBarrierException | IOException ex)
+                }
+                catch (InterruptedException | BrokenBarrierException | IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -381,10 +398,12 @@ public class JSF32_Week12_GUI extends Application
                         try
                         {
                             kochPanelMouseClicked(event);
-                        } catch (InterruptedException | BrokenBarrierException ex)
+                        }
+                        catch (InterruptedException | BrokenBarrierException ex)
                         {
                             Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex)
+                        }
+                        catch (IOException ex)
                         {
                             Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -411,10 +430,12 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     kochPanelMouseDragged(event);
-                } catch (InterruptedException | BrokenBarrierException ex)
+                }
+                catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
+                }
+                catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -435,6 +456,8 @@ public class JSF32_Week12_GUI extends Application
         primaryStage.setTitle("Koch Fractal");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        setupWatcher();
     }
 
     public void clearKochPanel()
@@ -465,10 +488,12 @@ public class JSF32_Week12_GUI extends Application
                 if (currentLevel <= 3)
                 {
                     gc.setLineWidth(2.0);
-                } else if (currentLevel <= 5)
+                }
+                else if (currentLevel <= 5)
                 {
                     gc.setLineWidth(1.5);
-                } else
+                }
+                else
                 {
                     gc.setLineWidth(1.0);
                 }
@@ -517,10 +542,12 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     kochManager.drawEdges();
-                } catch (InterruptedException | BrokenBarrierException ex)
+                }
+                catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
+                }
+                catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -566,7 +593,8 @@ public class JSF32_Week12_GUI extends Application
             if (event.getButton() == MouseButton.PRIMARY)
             {
                 zoom *= 2.0;
-            } else if (event.getButton() == MouseButton.SECONDARY)
+            }
+            else if (event.getButton() == MouseButton.SECONDARY)
             {
                 zoom /= 2.0;
             }
@@ -620,8 +648,37 @@ public class JSF32_Week12_GUI extends Application
      *
      * @param args the command line arguments
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
         launch(args);
+    }
+
+    public void setupWatcher() throws IOException
+    {
+        Path toWatch = Paths.get("C:\\Users\\Jelle\\Documents\\GitHub\\S32JSF3\\JSF32_Week14_NoGUI");
+        if (toWatch == null)
+        {
+            throw new UnsupportedOperationException("Directory not found");
+        }
+
+        // make a new watch service that we can register interest in 
+        // directories and files with.
+        WatchService myWatcher = toWatch.getFileSystem().newWatchService();
+
+        // start the file watcher thread below
+        WatchQueueReader fileWatcher = new WatchQueueReader(myWatcher, this);
+        Thread th = new Thread(fileWatcher, "FileWatcher");
+        th.start();
+
+        // register a file
+        toWatch.register(myWatcher, ENTRY_CREATE, ENTRY_MODIFY);
+        try
+        {
+            th.join();
+        }
+        catch (InterruptedException ex)
+        {
+            Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

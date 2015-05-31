@@ -1,0 +1,49 @@
+        try
+        {
+            KochManager manager = new KochManager(this);
+            WatchService watcher = FileSystems.getDefault().newWatchService();
+            Path dir = Paths.get("C:\\Users\\Jelle\\Documents\\GitHub\\S32JSF3\\JSF32_Week14_NoGUI");
+            dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+
+            System.out.println("Watch Service registered for dir: " + dir.getFileName());
+
+            while (true)
+            {
+                WatchKey key;
+                try
+                {
+                    key = watcher.take();
+                }
+                catch (InterruptedException ex)
+                {
+                    return;
+                }
+
+                for (WatchEvent<?> event : key.pollEvents())
+                {
+                    WatchEvent.Kind<?> kind = event.kind();
+
+                    @SuppressWarnings("unchecked")
+                    WatchEvent<Path> ev = (WatchEvent<Path>) event;
+                    Path fileName = ev.context();
+
+                    System.out.println(kind.name() + ": " + fileName);
+
+                    if (kind == ENTRY_MODIFY && fileName.toString().equals("binaryWithBuffer.dat"))
+                    {
+                        manager.drawBinaryWithBuffer();
+                    }
+                }
+
+                boolean valid = key.reset();
+                if (!valid)
+                {
+                    break;
+                }
+            }
+
+        }
+        catch (IOException ex)
+        {
+            System.err.println(ex);
+        }

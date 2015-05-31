@@ -234,7 +234,7 @@ public class KochManager
                     //application.drawEdge(edge);
                     counter++;
                 }
-                
+
                 ts.setEnd("End binaryNoBuffer");
 
             }
@@ -281,6 +281,40 @@ public class KochManager
                 application.labelLevel.setText("Level: " + levelEdge);
                 application.setTextNrOfEdges(String.valueOf(counter));
             }
+        }
+    }
+
+    public void drawBinaryWithBuffer() throws FileNotFoundException, IOException
+    {
+        FileInputStream fs = new FileInputStream("C:\\Users\\Jelle\\Documents\\GitHub\\S32JSF3\\JSF32_Week14_NoGUI\\binaryWithBuffer.dat");
+        ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fs));
+        Edge edge = null;
+        int levelEdge = 0, counter = 0;
+        try
+        {
+            ts.init();
+            ts.setBegin("Start binaryWithBuffer");
+            while (true)
+            {
+                edge = (Edge) in.readObject();
+                edge.color = Color.valueOf(edge.colorValue);
+                levelEdge = edge.level;
+                application.drawEdge(edge);
+                counter++;
+            }
+        }
+        catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally
+        {
+            ts.setEnd("End binaryWithBuffer");
+
+            System.out.println("De edges zijn uitgelezen uit een binary file met buffer! " + ts.toString());
+            in.close();
+            application.labelLevel.setText("Level: " + levelEdge);
+            application.setTextNrOfEdges(String.valueOf(counter));
         }
     }
 }

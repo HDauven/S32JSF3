@@ -46,10 +46,10 @@ public class JSF32_Week12_NoGUI implements Observer
     public static void main(String[] args) throws IOException
     {
         JSF32_Week12_NoGUI prog = new JSF32_Week12_NoGUI();
-        prog.start();
+        prog.startUp();
     }
 
-    public void start() throws IOException
+    public void startUp() throws IOException
     {
         fractal.addObserver(this);
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
