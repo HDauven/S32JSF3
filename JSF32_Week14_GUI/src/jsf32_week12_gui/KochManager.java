@@ -31,6 +31,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import jsf32_week12_nogui.Edge;
@@ -288,7 +289,14 @@ public class KochManager
 
     public void drawBinaryWithBuffer() throws FileNotFoundException, IOException
     {
-        application.clearKochPanel();
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                application.clearKochPanel();
+            }
+        });
+        
         Path dir = Paths.get(System.getProperty("user.dir"));
         dir = dir.getParent();
         dir = Paths.get(dir.toString() + "/JSF32_Week14_NoGUI");
