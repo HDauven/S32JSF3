@@ -170,16 +170,17 @@ public class JSF32_Week12_NoGUI implements Observer {
             System.out.println(bytes);
             MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_WRITE, 0, bytes);
             out.position(0);
-            int counter = 0;
-            //ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("binaryNoBuffer.dat"));
-
+            
+            int startRegion = 0;
+            int endRegion = 60;
+            
+            
             ts.init();
             ts.setBegin("Start binaryWithBuffer");
 
             //out.write(level);
             for (Edge e : edges) {
-                counter++;
-                out.putInt(counter);
+                fc.lock(startRegion, endRegion, false);
                 out.putDouble(e.X1);
                 out.putDouble(e.Y1);
                 out.putDouble(e.X2);
@@ -188,6 +189,7 @@ public class JSF32_Week12_NoGUI implements Observer {
                 out.putDouble(e.color.getGreen());
                 out.putDouble(e.color.getBlue());
                 out.putInt(e.level);
+                startRegion += 60;
             }
             ts.setEnd("End binaryNoBuffer");
             System.out.println("De edges zijn opgeslagen in een binary file met buffer! " + ts.toString());
