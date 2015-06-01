@@ -202,28 +202,27 @@ public class KochManager
         }
         else if (application.getBinaryNoBuffer())
         {
-            //FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryNoBuffer.dat");
-            //ObjectInputStream in = new ObjectInputStream(fs);
             RandomAccessFile ras = new RandomAccessFile("binaryNoBuffer.dat", "rw");
             FileChannel fc = ras.getChannel();
-            MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_WRITE, 0, fc.size());
-            out.position(0);
+            MappedByteBuffer in = fc.map(FileChannel.MapMode.READ_WRITE, 0, fc.size());
+            in.position(0);
             Edge edge = null;
             int levelEdge = 0, counter = 0;
+            
             try
             {
                 ts.init();
                 ts.setBegin("Start binaryNoBuffer");
-                while (out.hasRemaining())
+                while (in.hasRemaining())
                 {
-                    double X1 = out.getDouble();
-                    double Y1 = out.getDouble();
-                    double X2 = out.getDouble();
-                    double Y2 = out.getDouble();
-                    double red = out.getDouble();
-                    double green = out.getDouble();
-                    double blue = out.getDouble();
-                    levelEdge = out.getInt();
+                    double X1 = in.getDouble();
+                    double Y1 = in.getDouble();
+                    double X2 = in.getDouble();
+                    double Y2 = in.getDouble();
+                    double red = in.getDouble();
+                    double green = in.getDouble();
+                    double blue = in.getDouble();
+                    levelEdge = in.getInt();
                     edge = new Edge(X1, Y1, X2, Y2, new Color(red, green, blue, 1), levelEdge);
                     application.drawEdge(edge);
                     //System.out.println(out.getDouble());
