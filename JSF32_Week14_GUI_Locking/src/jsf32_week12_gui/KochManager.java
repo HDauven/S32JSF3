@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -37,8 +38,7 @@ import jsf32_week12_nogui.Edge;
  *
  * @author Jelle
  */
-public class KochManager
-{
+public class KochManager {
 
     private JSF32_Week12_GUI application;
     //private KochFractal koch;                   //De KochFractal.
@@ -54,8 +54,7 @@ public class KochManager
     private String level = "0";
     private TimeStamp ts = new TimeStamp();
 
-    public KochManager(JSF32_Week12_GUI application)
-    {
+    public KochManager(JSF32_Week12_GUI application) {
         this.application = application;
         //koch.addObserver(Runnable);
         edges = new ArrayList<>();
@@ -63,21 +62,17 @@ public class KochManager
         tsDraw = new TimeStamp();
     }
 
-    public synchronized void increaseCount()
-    {
+    public synchronized void increaseCount() {
         count++;
     }
 
-    public void changeLevel(int nxt) throws InterruptedException, ExecutionException, BrokenBarrierException
-    {
+    public void changeLevel(int nxt) throws InterruptedException, ExecutionException, BrokenBarrierException {
 
         application.clearKochPanel();
 
         //koch.setLevel(nxt);
-        if (task1 != null && task2 != null && task3 != null)
-        {
-            if (task1.isRunning() || task2.isRunning() || task3.isRunning())
-            {
+        if (task1 != null && task2 != null && task3 != null) {
+            if (task1.isRunning() || task2.isRunning() || task3.isRunning()) {
                 task1.cancel();
                 task2.cancel();
                 task3.cancel();
@@ -89,29 +84,22 @@ public class KochManager
         application.setTextCalc(tsCalc.toString());
     }
 
-    public void drawEdges() throws InterruptedException, BrokenBarrierException, FileNotFoundException, IOException
-    {
+    public void drawEdges() throws InterruptedException, BrokenBarrierException, FileNotFoundException, IOException {
         application.clearKochPanel();
 
-        if (application.getTextNoBuffer())
-        {
+        if (application.getTextNoBuffer()) {
             ts.init();
             ts.setBegin("Start textNoBuffer");
             lineNumber = 1;
             FileReader fr = new FileReader(System.getProperty("user.dir") + "/textNoBuffer.txt");
             Scanner inputScanner = new Scanner(fr);
-            try
-            {
-                while (inputScanner.hasNextLine())
-                {
+            try {
+                while (inputScanner.hasNextLine()) {
                     String regel = inputScanner.nextLine();
 
-                    if (lineNumber == 1)
-                    {
+                    if (lineNumber == 1) {
                         level = regel;
-                    }
-                    else
-                    {
+                    } else {
                         String[] parameters = regel.split(",");
                         double X1 = Double.valueOf(parameters[0]);
                         double Y1 = Double.valueOf(parameters[1]);
@@ -133,29 +121,21 @@ public class KochManager
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(lineNumber - 2));
 
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
-            }
-            finally
-            {
+            } finally {
                 fr.close();
                 inputScanner.close();
             }
-        }
-        else if (application.getTextWithBuffer())
-        {
+        } else if (application.getTextWithBuffer()) {
             FileReader fr = new FileReader(System.getProperty("user.dir") + "/textWithBuffer.txt");
             BufferedReader br = new BufferedReader(fr);
             Scanner inputScanner = new Scanner(br);
             int counter = 0;
-            try
-            {
+            try {
                 ts.init();
                 ts.setBegin("Start textWithBuffer");
-                while (inputScanner.hasNext())
-                {
+                while (inputScanner.hasNext()) {
                     String regel = inputScanner.next();
                     StringBuilder sb = new StringBuilder(regel);
                     System.out.println(regel);
@@ -166,8 +146,7 @@ public class KochManager
                     System.out.println(level);
 
                     String[] parameters = regel.split(",");
-                    for (int i = 4; i < parameters.length; i = i + 5)
-                    {
+                    for (int i = 4; i < parameters.length; i = i + 5) {
                         double X1 = Double.valueOf(parameters[i - 4]);
                         double Y1 = Double.valueOf(parameters[i - 3]);
                         double X2 = Double.valueOf(parameters[i - 2]);
@@ -187,34 +166,26 @@ public class KochManager
                 System.out.println("De edges zijn uitgelezen uit een text file met buffer! " + ts.toString());
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(counter));
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, e);
-            }
-            finally
-            {
+            } finally {
                 fr.close();
                 br.close();
                 inputScanner.close();
             }
 
-        }
-        else if (application.getBinaryNoBuffer())
-        {
+        } else if (application.getBinaryNoBuffer()) {
             RandomAccessFile ras = new RandomAccessFile("binaryNoBuffer.dat", "rw");
             FileChannel fc = ras.getChannel();
             MappedByteBuffer in = fc.map(FileChannel.MapMode.READ_WRITE, 0, fc.size());
             in.position(0);
             Edge edge = null;
             int levelEdge = 0, counter = 0;
-            
-            try
-            {
+
+            try {
                 ts.init();
                 ts.setBegin("Start binaryNoBuffer");
-                while (in.hasRemaining())
-                {
+                while (in.hasRemaining()) {
                     double X1 = in.getDouble();
                     double Y1 = in.getDouble();
                     double X2 = in.getDouble();
@@ -233,53 +204,88 @@ public class KochManager
                     //application.drawEdge(edge);
                     counter++;
                 }
-                
+
                 ts.setEnd("End binaryNoBuffer");
 
-            }
-            catch (Exception ioe)
-            {
+            } catch (Exception ioe) {
                 Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ioe);
-            }
-            finally
-            {
+            } finally {
                 System.out.println("De edges zijn uitgelezen uit een binary file zonder buffer! " + ts.toString());
                 application.labelLevel.setText("Level: " + levelEdge);
                 application.setTextNrOfEdges(String.valueOf(counter));
             }
-        }
-        else if (application.getBinaryWithBuffer())
-        {
-            FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryWithBuffer.dat");
-            ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fs));
+        } else if (application.getBinaryWithBuffer()) {
+            RandomAccessFile ras = new RandomAccessFile("binaryWithBuffer.dat", "rw");
+            FileChannel fc = ras.getChannel();
+            MappedByteBuffer in = fc.map(FileChannel.MapMode.READ_WRITE, 0, fc.size());
             Edge edge = null;
             int levelEdge = 0, counter = 0;
-            try
-            {
+
+            int startRegion = 1;
+            int regionSize = 64;
+            FileLock exclusiveLock = null;
+            
+            in.position(0);
+            
+            try {
                 ts.init();
                 ts.setBegin("Start binaryWithBuffer");
-                while (true)
-                {
-                    edge = (Edge) in.readObject();
-                    edge.color = Color.valueOf(edge.colorValue);
-                    levelEdge = edge.level;
+                while (in.getInt(0) == 1) {
+                    exclusiveLock = fc.lock(startRegion, regionSize, false);
+                    double X1 = in.getDouble();
+                    double Y1 = in.getDouble();
+                    double X2 = in.getDouble();
+                    double Y2 = in.getDouble();
+                    double red = in.getDouble();
+                    double green = in.getDouble();
+                    double blue = in.getDouble();
+                    levelEdge = in.getInt();
+                    edge = new Edge(X1, Y1, X2, Y2, new Color(red, green, blue, 1), levelEdge);
                     application.drawEdge(edge);
+                    startRegion += 64;
+                    exclusiveLock.release();
                     counter++;
                 }
-            }
-            catch (ClassNotFoundException ex)
-            {
-                Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            finally
-            {
+
                 ts.setEnd("End binaryWithBuffer");
 
+            } catch (Exception ioe) {
+                Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ioe);
+            } finally {
                 System.out.println("De edges zijn uitgelezen uit een binary file met buffer! " + ts.toString());
-                in.close();
                 application.labelLevel.setText("Level: " + levelEdge);
                 application.setTextNrOfEdges(String.valueOf(counter));
             }
+//            FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryWithBuffer.dat");
+//            ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fs));
+//            Edge edge = null;
+//            int levelEdge = 0, counter = 0;
+//            try
+//            {
+//                ts.init();
+//                ts.setBegin("Start binaryWithBuffer");
+//                while (true)
+//                {
+//                    edge = (Edge) in.readObject();
+//                    edge.color = Color.valueOf(edge.colorValue);
+//                    levelEdge = edge.level;
+//                    application.drawEdge(edge);
+//                    counter++;
+//                }
+//            }
+//            catch (ClassNotFoundException ex)
+//            {
+//                Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            finally
+//            {
+//                ts.setEnd("End binaryWithBuffer");
+//
+//                System.out.println("De edges zijn uitgelezen uit een binary file met buffer! " + ts.toString());
+//                in.close();
+//                application.labelLevel.setText("Level: " + levelEdge);
+//                application.setTextNrOfEdges(String.valueOf(counter));
+//            }
         }
     }
 }

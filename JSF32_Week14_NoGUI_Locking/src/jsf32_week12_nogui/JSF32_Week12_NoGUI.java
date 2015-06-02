@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -134,7 +135,6 @@ public class JSF32_Week12_NoGUI implements Observer {
             RandomAccessFile ras = new RandomAccessFile("binaryNoBuffer.dat", "rw");
             FileChannel fc = ras.getChannel();
             int bytes = 60 * edges.size();
-            System.out.println(bytes);
             MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_WRITE, 0, bytes);
             out.position(0);
             //ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("binaryNoBuffer.dat"));
@@ -166,21 +166,25 @@ public class JSF32_Week12_NoGUI implements Observer {
         try {
             RandomAccessFile ras = new RandomAccessFile("binaryWithBuffer.dat", "rw");
             FileChannel fc = ras.getChannel();
-            int bytes = 60 * edges.size();
-            System.out.println(bytes);
+            int bytes = 64 * edges.size();
             MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_WRITE, 0, bytes);
+
+            int startRegion = 1;
+            int regionSize = 64;
+            
             out.position(0);
-            
-            int startRegion = 0;
-            int endRegion = 60;
-            
-            
+
+            FileLock exclusiveLock = null;
+
             ts.init();
             ts.setBegin("Start binaryWithBuffer");
 
             //out.write(level);
             for (Edge e : edges) {
-                fc.lock(startRegion, endRegion, false);
+                exclusiveLock = fc.lock(startRegion, regionSize, false);
+                out.putInt(0, 0);
+
+                out.position(startRegion);
                 out.putDouble(e.X1);
                 out.putDouble(e.Y1);
                 out.putDouble(e.X2);
@@ -189,15 +193,17 @@ public class JSF32_Week12_NoGUI implements Observer {
                 out.putDouble(e.color.getGreen());
                 out.putDouble(e.color.getBlue());
                 out.putInt(e.level);
-                startRegion += 60;
+                startRegion += 64;
+                //Zet status op 1 (er mag gelezen worden)
+                out.putInt(0, 1);
+                exclusiveLock.release();
             }
-            ts.setEnd("End binaryNoBuffer");
+            ts.setEnd("End binaryWithBuffer");
             System.out.println("De edges zijn opgeslagen in een binary file met buffer! " + ts.toString());
         } catch (IOException ioe) {
             Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ioe);
         }
 
-        
 //        try
 //        {
 //            FileOutputStream file = new FileOutputStream("binaryWithBuffer.dat");
