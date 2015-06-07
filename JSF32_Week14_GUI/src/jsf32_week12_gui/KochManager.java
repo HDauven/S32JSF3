@@ -319,7 +319,7 @@ public class KochManager
                 counter++;
             }
         }
-        catch (ClassNotFoundException ex)
+        catch (ClassNotFoundException | EOFException ex)
         {
             Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -329,6 +329,7 @@ public class KochManager
 
             System.out.println("De edges zijn uitgelezen uit een binary file met buffer! " + ts.toString());
             in.close();
+            fs.close();
             application.labelLevel.setText("Level: " + levelEdge);
             application.setTextNrOfEdges(String.valueOf(counter));
         }

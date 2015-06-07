@@ -5,6 +5,7 @@
  */
 package jsf32_week12_gui;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -169,6 +170,10 @@ public class WatchDirRunnable implements Runnable {
                             try
                             {
                                 kochManager.drawBinaryWithBuffer();
+                            }
+                            catch (EOFException ex)
+                            {
+                                Logger.getLogger(WatchDirRunnable.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             catch (IOException ex)
                             {
