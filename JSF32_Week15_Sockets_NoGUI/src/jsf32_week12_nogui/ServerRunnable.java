@@ -5,7 +5,9 @@
  */
 package jsf32_week12_nogui;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,15 +19,22 @@ import java.util.logging.Logger;
 public class ServerRunnable implements Runnable
 {
 
-    private Socket socket = null;
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    
-    public ServerRunnable(Socket socket) throws IOException
+    private Socket socket;
+    private JSF32_Week12_NoGUI app;
+
+    public ServerRunnable(Socket s) throws IOException
     {
-        this.socket = socket;
-        in = new ObjectInputStream(this.socket.getInputStream());
-        out = new ObjectOutputStream(this.socket.getOutputStream());
+        this.socket = s;
+        app = new JSF32_Week12_NoGUI();
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
+    }
+    
+    public ServerRunnable()
+    {
+        
     }
 
     @Override
@@ -35,22 +44,25 @@ public class ServerRunnable implements Runnable
         {
             try
             {
-                Edge edge = (Edge) in.readObject();
-                Client.edges.add(edge);
-                System.out.println(edge.toString());
+                int level = (int) in.readObject();
+
+                if (level > 0)
+                {
+                    Logger.getLogger(ServerRunnable.class.getName()).log(Level.INFO,
+                            "Level to generate: {0}", level);
+
+                    app.edges.clear();
+                    app.generateEdges(level);
+                }
             }
-            catch (IOException | ClassNotFoundException ex)
+            catch (IOException | ClassNotFoundException | NumberFormatException ex)
             {
                 Logger.getLogger(ServerRunnable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-    
-    /**
-     * Send an Edge to the server.
-     * @param edge 
-     */
-    public void sendToServer(Edge edge)
+
+    public void writeEdge(Edge edge)
     {
         try
         {

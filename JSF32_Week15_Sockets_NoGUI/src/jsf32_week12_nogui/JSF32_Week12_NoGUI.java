@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -33,11 +34,12 @@ public class JSF32_Week12_NoGUI implements Observer
 
     private static final Logger LOG = Logger.getLogger(JSF32_Week12_NoGUI.class.getName());
     private KochFractal fractal = new KochFractal();
-    private ArrayList<Edge> edges = new ArrayList<>();
+    public ArrayList<Edge> edges = new ArrayList<>();
     private Integer level = 0;
     private TimeStamp ts = new TimeStamp();
     private ArrayList<Client> connectedClients;
     private ServerSocket server;
+    private ServerRunnable serverRunnable = new ServerRunnable();
 
     /**
      * @param args the command line arguments
@@ -73,7 +75,10 @@ public class JSF32_Week12_NoGUI implements Observer
         {
             try
             {
-                Thread thr = new Thread(new ServerRunnable(server.accept()));
+                Socket s = server.accept();
+                connectedClients.add(new Client("localhost", 4444));
+                Thread thr = new Thread(new ClientRunnable(s));
+                thr.setDaemon(false);
                 LOG.log(Level.INFO, "New Client Connected: {0}", server.getInetAddress());
                 thr.start();
             }
@@ -83,29 +88,27 @@ public class JSF32_Week12_NoGUI implements Observer
             }
         }
 
+    }
 
-//        try
-//        {
-//            level = Integer.parseInt(input);
-//            if (level < 0)
-//            {
-//                throw new NumberFormatException();
-//            }
-//
-//            fractal.setLevel(level);
-//
-//            fractal.generateBottomEdge();
-//            fractal.generateLeftEdge();
-//            fractal.generateRightEdge();
-//
-//            writeTextFileNoBuffer();
-//            writeTextFileWithBuffer();
-//            writeBinaryFileNoBuffer();
-//            writeBinaryFileWithBuffer();
-//        } catch (NumberFormatException exc)
-//        {
-//            System.err.println("Ongeldig level!");
-//        }
+    public void generateEdges(int level)
+    {
+        try
+        {
+            if (level < 0)
+            {
+                throw new NumberFormatException();
+            }
+
+            fractal.setLevel(level);
+
+            fractal.generateBottomEdge();
+            fractal.generateLeftEdge();
+            fractal.generateRightEdge();
+        }
+        catch (NumberFormatException exc)
+        {
+            System.err.println("Ongeldig level!");
+        }
     }
 
     public void writeTextFileNoBuffer()
@@ -238,5 +241,9 @@ public class JSF32_Week12_NoGUI implements Observer
         Edge e = (Edge) arg;
         e.colorValue = e.color.toString();
         this.edges.add(e);
+        for (Client client : connectedClients)
+        {
+            serverRunnable.writeEdge(e);
+        }
     }
 }

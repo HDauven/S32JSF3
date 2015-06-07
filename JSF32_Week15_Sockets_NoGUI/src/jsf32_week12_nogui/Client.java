@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Client
 {
 
-    private ServerRunnable server;
+    private ClientRunnable server;
     public static ArrayList<Edge> edges;
     private Socket socket;
 
@@ -24,7 +24,7 @@ public class Client
     {
         socket = new Socket(IP, port);
         edges = new ArrayList<>();
-        server = new ServerRunnable(socket);
+        server = new ClientRunnable(socket);
     }
 
 }

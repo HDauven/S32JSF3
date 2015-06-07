@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import jsf32_week12_nogui.Edge;
@@ -47,14 +48,18 @@ public class KochManager
     private int lineNumber = 1;
     private String level = "0";
     private TimeStamp ts = new TimeStamp();
+    private Client client;
 
-    public KochManager(JSF32_Week12_GUI application)
+    public KochManager(JSF32_Week12_GUI application) throws IOException
     {
         this.application = application;
         //koch.addObserver(Runnable);
         edges = new ArrayList<>();
         tsCalc = new TimeStamp();
         tsDraw = new TimeStamp();
+        client = new Client("localhost", 4444);
+        getEdges();
+        
     }
 
     public synchronized void increaseCount()
@@ -262,5 +267,26 @@ public class KochManager
                 application.setTextNrOfEdges(String.valueOf(counter));
             }
         }
+    }
+    
+        private void getEdges() {
+        Thread thr = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    if (client.getEdge() != null) {
+                            Edge edge = client.getEdge();
+                            edges.add(edge);
+                            Platform.runLater(() -> {
+
+                                application.drawEdge(edge);
+                            });
+                            //client.removeEdge(edge);
+                    }
+                }
+            }
+        };
+        thr.setDaemon(true);
+        thr.start();
     }
 }

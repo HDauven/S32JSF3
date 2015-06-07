@@ -104,7 +104,7 @@ public class JSF32_Week12_GUI extends Application
     }
 
     @Override
-    public void start(Stage primaryStage) throws InterruptedException, ExecutionException, BrokenBarrierException
+    public void start(Stage primaryStage) throws InterruptedException, ExecutionException, BrokenBarrierException, IOException
     {
 
         // Define grid pane
