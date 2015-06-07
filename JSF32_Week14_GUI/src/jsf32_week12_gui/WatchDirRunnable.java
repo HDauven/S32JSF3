@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
@@ -159,11 +160,23 @@ public class WatchDirRunnable implements Runnable {
                     }
                 }
                 if (kind == ENTRY_MODIFY && filename.toString().equals("binaryWithBuffer.dat")) {
-                    try {
-                        kochManager.drawBinaryWithBuffer();
-                    } catch (IOException ex) {
-                        Logger.getLogger(WatchDirRunnable.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    Platform.runLater(new Runnable()
+                    {
+                        
+                        @Override
+                        public void run()
+                        {
+                            try
+                            {
+                                kochManager.drawBinaryWithBuffer();
+                            }
+                            catch (IOException ex)
+                            {
+                                Logger.getLogger(WatchDirRunnable.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        
+                    });
                 }
             }
 

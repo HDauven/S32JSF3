@@ -13,6 +13,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 
 /**
  *
@@ -51,14 +52,23 @@ public class WatchQueueReader implements Runnable
 
                     if (kind == ENTRY_MODIFY && fileName.toString().equals("binaryWithBuffer.dat"))
                     {
-                        try
+                        Platform.runLater(new Runnable()
                         {
-                            manager.drawBinaryWithBuffer();
-                        }
-                        catch (IOException ex)
-                        {
-                            Logger.getLogger(WatchQueueReader.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+
+                            @Override
+                            public void run()
+                            {
+                                try
+                                {
+                                    manager.drawBinaryWithBuffer();
+                                }
+                                catch (IOException ex)
+                                {
+                                    Logger.getLogger(WatchQueueReader.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                            
+                        });
                     }
                 }
             }
