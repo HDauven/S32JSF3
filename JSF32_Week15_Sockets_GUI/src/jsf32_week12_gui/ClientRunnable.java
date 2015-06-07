@@ -25,8 +25,9 @@ public class ClientRunnable implements Runnable
     public ClientRunnable(Socket socket) throws IOException
     {
         this.socket = socket;
-        in = new ObjectInputStream(this.socket.getInputStream());
         out = new ObjectOutputStream(this.socket.getOutputStream());
+        out.flush();
+        in = new ObjectInputStream(this.socket.getInputStream());
     }
 
     @Override

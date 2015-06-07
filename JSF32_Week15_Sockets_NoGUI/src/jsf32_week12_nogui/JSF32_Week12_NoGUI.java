@@ -87,7 +87,6 @@ public class JSF32_Week12_NoGUI implements Observer
                 Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }
 
     public void generateEdges(int level)
