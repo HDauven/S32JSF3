@@ -240,6 +240,7 @@ public class KochManager
                     double blue = in.getDouble();
                     levelEdge = in.getInt();
                     edge = new Edge(X1, Y1, X2, Y2, new Color(red, green, blue, 1), levelEdge);
+                    System.out.println(levelEdge);
                     application.drawEdge(edge);
                     //System.out.println(out.getDouble());
                     //edge = (Edge) in.readObject();
@@ -259,6 +260,8 @@ public class KochManager
             }
             finally
             {
+                fc.close();
+                in.clear();
                 System.out.println("De edges zijn uitgelezen uit een binary file zonder buffer! " + ts.toString());
                 application.labelLevel.setText("Level: " + levelEdge);
                 application.setTextNrOfEdges(String.valueOf(counter));

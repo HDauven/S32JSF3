@@ -112,8 +112,7 @@ public class KochManager
                     if (lineNumber == 1)
                     {
                         level = regel;
-                    }
-                    else
+                    } else
                     {
                         String[] parameters = regel.split(",");
                         double X1 = Double.valueOf(parameters[0]);
@@ -136,18 +135,15 @@ public class KochManager
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(lineNumber - 2));
 
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 e.printStackTrace();
-            }
-            finally
+            } finally
             {
                 fr.close();
                 inputScanner.close();
             }
-        }
-        else if (application.getTextWithBuffer())
+        } else if (application.getTextWithBuffer())
         {
             FileReader fr = new FileReader(System.getProperty("user.dir") + "/textWithBuffer.txt");
             BufferedReader br = new BufferedReader(fr);
@@ -190,20 +186,17 @@ public class KochManager
                 System.out.println("De edges zijn uitgelezen uit een text file met buffer! " + ts.toString());
                 application.labelLevel.setText("Level: " + level);
                 application.setTextNrOfEdges(String.valueOf(counter));
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, e);
-            }
-            finally
+            } finally
             {
                 fr.close();
                 br.close();
                 inputScanner.close();
             }
 
-        }
-        else if (application.getBinaryNoBuffer())
+        } else if (application.getBinaryNoBuffer())
         {
             //FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryNoBuffer.dat");
             //ObjectInputStream in = new ObjectInputStream(fs);
@@ -240,19 +233,16 @@ public class KochManager
 
                 ts.setEnd("End binaryNoBuffer");
 
-            }
-            catch (Exception ioe)
+            } catch (Exception ioe)
             {
                 Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ioe);
-            }
-            finally
+            } finally
             {
                 System.out.println("De edges zijn uitgelezen uit een binary file zonder buffer! " + ts.toString());
                 application.labelLevel.setText("Level: " + levelEdge);
                 application.setTextNrOfEdges(String.valueOf(counter));
             }
-        }
-        else if (application.getBinaryWithBuffer())
+        } else if (application.getBinaryWithBuffer())
         {
             FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryWithBuffer.dat");
             ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fs));
@@ -270,12 +260,10 @@ public class KochManager
                     application.drawEdge(edge);
                     counter++;
                 }
-            }
-            catch (ClassNotFoundException ex)
+            } catch (ClassNotFoundException ex)
             {
                 Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            finally
+            } finally
             {
                 ts.setEnd("End binaryWithBuffer");
 
@@ -289,21 +277,24 @@ public class KochManager
 
     public void drawBinaryWithBuffer() throws FileNotFoundException, IOException
     {
-        Platform.runLater(new Runnable() {
+        Platform.runLater(new Runnable()
+        {
 
             @Override
-            public void run() {
+            public void run()
+            {
                 application.clearKochPanel();
             }
         });
-        
+
         Path dir = Paths.get(System.getProperty("user.dir"));
         dir = dir.getParent();
         dir = Paths.get(dir.toString() + "/JSF32_Week14_NoGUI");
         String file = dir.toString() + "/binaryWithBuffer.dat";
-        
+
         FileInputStream fs = new FileInputStream(file);
         ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fs));
+
         Edge edge = null;
         int levelEdge = 0, counter = 0;
         try
@@ -318,12 +309,10 @@ public class KochManager
                 application.drawEdge(edge);
                 counter++;
             }
-        }
-        catch (ClassNotFoundException | EOFException ex)
+        } catch (ClassNotFoundException | EOFException ex)
         {
             Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally
+        } finally
         {
             ts.setEnd("End binaryWithBuffer");
 
