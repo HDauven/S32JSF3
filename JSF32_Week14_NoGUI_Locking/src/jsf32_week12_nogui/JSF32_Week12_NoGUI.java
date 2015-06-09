@@ -153,6 +153,7 @@ public class JSF32_Week12_NoGUI implements Observer {
                 out.putDouble(e.color.getGreen());
                 out.putDouble(e.color.getBlue());
                 out.putInt(e.level);
+                System.out.println(e.level);
             }
 
             ts.setEnd("End binaryNoBuffer");

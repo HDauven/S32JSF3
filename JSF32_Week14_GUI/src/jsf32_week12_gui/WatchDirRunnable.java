@@ -147,7 +147,7 @@ public class WatchDirRunnable implements Runnable {
                 
                 
                 // print out event
-                System.out.format("%s: %s\n", event.kind().name(), child);
+                //System.out.format("%s: %s\n", event.kind().name(), child);
 
                 // if directory is created, and watching recursively, then
                 // register it and its sub-directories
@@ -170,6 +170,7 @@ public class WatchDirRunnable implements Runnable {
                             try
                             {
                                 kochManager.drawBinaryWithBuffer();
+                                System.out.println("binaryWithBuffer has been modified!");
                             }
                             catch (EOFException ex)
                             {
