@@ -153,7 +153,6 @@ public class JSF32_Week12_NoGUI implements Observer {
                 out.putDouble(e.color.getGreen());
                 out.putDouble(e.color.getBlue());
                 out.putInt(e.level);
-                System.out.println(e.level);
             }
 
             ts.setEnd("End binaryNoBuffer");
@@ -182,18 +181,16 @@ public class JSF32_Week12_NoGUI implements Observer {
             //out.write(level);
             Iterator<Edge> it = edges.iterator();
             Edge e;
-            exclusiveLock = fc.lock(0, Integer.BYTES, false);
+            exclusiveLock = fc.lock(0, 4, false);
             out.position(0);
             out.putInt(0, 0);
             out.position(startRegion);
             exclusiveLock.release();
-            while (true) {
-                exclusiveLock = fc.lock(0, Integer.BYTES, false);
+            while (it.hasNext()) {
+                exclusiveLock = fc.lock(0, 4, false);
                 int status = out.getInt(0);
                 exclusiveLock.release();
- 
                 if (status == 0) {
-                    if (it.hasNext()) {
                         exclusiveLock = fc.lock(startRegion, regionSize, false);
                         e = it.next();
                         out.putInt(0, 0);
@@ -210,7 +207,6 @@ public class JSF32_Week12_NoGUI implements Observer {
                         //Zet status op 1 (er mag gelezen worden)
                         out.putInt(0, 1);
                         exclusiveLock.release();
-                    }
                 }
             }
         } catch (IOException ioe) {

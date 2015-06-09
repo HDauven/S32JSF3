@@ -249,54 +249,45 @@ public class KochManager {
 
                     @Override
                     public void run() {
-                        ts.init();
-                        ts.setBegin("Start binaryWithBuffer");
                         try {
-                            exclusiveLock = fc.lock(0, Integer.BYTES, false);
-                        } catch (IOException ex) {
-                            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        int status = in.getInt(0);
-                        try {
-                            exclusiveLock.release();
-                        } catch (IOException ex) {
-                            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        if (status == 1) {
-                            try {
-                                in.position(startRegion);
-                                exclusiveLock = fc.lock(startRegion, regionSize, false);
-                            } catch (IOException ex) {
-                                Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            double X1 = in.getDouble();
-                            double Y1 = in.getDouble();
-                            double X2 = in.getDouble();
-                            double Y2 = in.getDouble();
-                            double red = in.getDouble();
-                            double green = in.getDouble();
-                            double blue = in.getDouble();
-                            levelEdge = in.getInt();
-                            edge = new Edge(X1, Y1, X2, Y2, new Color(red, green, blue, 1), levelEdge);
-                            application.drawEdge(edge);
-                            startRegion += 64;
-                            in.putInt(0, 0);
-                            try {
+                            ts.init();
+                            ts.setBegin("Start binaryWithBuffer");
+                            int status = -1;
+
+                            while (startRegion < fc.size()) {
+                                exclusiveLock = fc.lock(0, 4, true);
+                                status = in.getInt(0);
                                 exclusiveLock.release();
-                            } catch (IOException ex) {
-                                Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
+
+                                if (status == 1) {
+                                    exclusiveLock = fc.lock(startRegion, regionSize, true);
+                                    in.position(startRegion);
+                                    double X1 = in.getDouble();
+                                    double Y1 = in.getDouble();
+                                    double X2 = in.getDouble();
+                                    double Y2 = in.getDouble();
+                                    double red = in.getDouble();
+                                    double green = in.getDouble();
+                                    double blue = in.getDouble();
+                                    levelEdge = in.getInt();
+                                    edge = new Edge(X1, Y1, X2, Y2, new Color(red, green, blue, 1), levelEdge);
+                                    application.drawEdge(edge);
+                                    startRegion += 64;
+                                    in.putInt(0, 0);
+                                    exclusiveLock.release();
+                                    counter++;
+                                } else {
+                                    Thread.sleep(20);
+                                }
                             }
-                            counter++;
-                        } else {
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-                            } finally {
+                        } catch (IOException | InterruptedException ex) {
+                            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
+                        } finally {
+                            if (exclusiveLock != null) {
                                 try {
-                                    if (exclusiveLock != null) {
-                                        exclusiveLock.release();
-                                    }
+                                    exclusiveLock.release();
+                                    application.labelLevel.setText("Level: " + levelEdge);
+                                    application.setTextNrOfEdges(String.valueOf(counter));
                                 } catch (IOException ex) {
                                     Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -304,15 +295,12 @@ public class KochManager {
                         }
                     }
                 });
-
                 t1.start();
             } catch (Exception ioe) {
                 Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ioe);
             } finally {
                 ts.setEnd("End binaryWithBuffer");
                 System.out.println("De edges zijn uitgelezen uit een binary file met buffer! " + ts.toString());
-                //application.labelLevel.setText("Level: " + levelEdge);
-                //application.setTextNrOfEdges(String.valueOf(counter));
             }
 //            FileInputStream fs = new FileInputStream(System.getProperty("user.dir") + "/binaryWithBuffer.dat");
 //            ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fs));
