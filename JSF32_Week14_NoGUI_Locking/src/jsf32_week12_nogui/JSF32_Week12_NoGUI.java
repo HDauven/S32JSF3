@@ -23,6 +23,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -169,10 +170,8 @@ public class JSF32_Week12_NoGUI implements Observer {
             int bytes = 64 * edges.size();
             MappedByteBuffer out = fc.map(FileChannel.MapMode.READ_WRITE, 0, bytes);
 
-            int startRegion = 1;
+            int startRegion = 4;
             int regionSize = 64;
-            
-            out.position(0);
 
             FileLock exclusiveLock = null;
 
@@ -180,28 +179,44 @@ public class JSF32_Week12_NoGUI implements Observer {
             ts.setBegin("Start binaryWithBuffer");
 
             //out.write(level);
-            for (Edge e : edges) {
-                exclusiveLock = fc.lock(startRegion, regionSize, false);
-                out.putInt(0, 0);
-
-                out.position(startRegion);
-                out.putDouble(e.X1);
-                out.putDouble(e.Y1);
-                out.putDouble(e.X2);
-                out.putDouble(e.Y2);
-                out.putDouble(e.color.getRed());
-                out.putDouble(e.color.getGreen());
-                out.putDouble(e.color.getBlue());
-                out.putInt(e.level);
-                startRegion += 64;
-                //Zet status op 1 (er mag gelezen worden)
-                out.putInt(0, 1);
+            Iterator<Edge> it = edges.iterator();
+            Edge e;
+            exclusiveLock = fc.lock(0, Integer.BYTES, false);
+            out.position(0);
+            out.putInt(0, 0);
+            out.position(startRegion);
+            exclusiveLock.release();
+            while (true) {
+                exclusiveLock = fc.lock(0, Integer.BYTES, false);
+                int status = out.getInt(0);
                 exclusiveLock.release();
+ 
+                if (status == 0) {
+                    if (it.hasNext()) {
+                        exclusiveLock = fc.lock(startRegion, regionSize, false);
+                        e = it.next();
+                        out.putInt(0, 0);
+                        out.position(startRegion);
+                        out.putDouble(e.X1);
+                        out.putDouble(e.Y1);
+                        out.putDouble(e.X2);
+                        out.putDouble(e.Y2);
+                        out.putDouble(e.color.getRed());
+                        out.putDouble(e.color.getGreen());
+                        out.putDouble(e.color.getBlue());
+                        out.putInt(e.level);
+                        startRegion += 64;
+                        //Zet status op 1 (er mag gelezen worden)
+                        out.putInt(0, 1);
+                        exclusiveLock.release();
+                    }
+                }
             }
-            ts.setEnd("End binaryWithBuffer");
-            System.out.println("De edges zijn opgeslagen in een binary file met buffer! " + ts.toString());
         } catch (IOException ioe) {
             Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ioe);
+        } finally {
+            ts.setEnd("End binaryWithBuffer");
+            System.out.println("De edges zijn opgeslagen in een binary file met buffer! " + ts.toString());
         }
 
 //        try
