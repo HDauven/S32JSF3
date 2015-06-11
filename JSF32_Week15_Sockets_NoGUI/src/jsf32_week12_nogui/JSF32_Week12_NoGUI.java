@@ -75,9 +75,9 @@ public class JSF32_Week12_NoGUI implements Observer
         {
             try
             {
-                Socket s = server.accept();
+                //Socket s = server.accept();
+                Thread thr = new Thread(new ClientRunnable(server.accept()));
                 connectedClients.add(new Client("localhost", 4444));
-                Thread thr = new Thread(new ClientRunnable(s));
                 thr.setDaemon(false);
                 LOG.log(Level.INFO, "New Client Connected: {0}", server.getInetAddress());
                 thr.start();

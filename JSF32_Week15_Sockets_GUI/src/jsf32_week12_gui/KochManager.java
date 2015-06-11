@@ -271,6 +271,7 @@ public class KochManager
     
         private void getEdges() {
         Thread thr = new Thread() {
+            
             @Override
             public void run() {
                 while (true) {
