@@ -24,17 +24,18 @@ public class ServerRunnable
     private Socket socket;
     private JSF32_Week12_NoGUI app;
 
-    public ServerRunnable(Socket s) throws IOException
+    public ServerRunnable(Socket s) throws IOException, ClassNotFoundException
     {
         this.socket = s;
         app = new JSF32_Week12_NoGUI();
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
+        
+        int level = (int) in.readObject();
         while (true)
         {
             try
             {
-                int level = (int) in.readObject();
 
                 if (level > 0)
                 {
@@ -45,7 +46,7 @@ public class ServerRunnable
                     app.generateEdges(level);
                 }
             }
-            catch (IOException | ClassNotFoundException | NumberFormatException ex)
+            catch (NumberFormatException ex)
             {
                 Logger.getLogger(ServerRunnable.class.getName()).log(Level.SEVERE, null, ex);
             }

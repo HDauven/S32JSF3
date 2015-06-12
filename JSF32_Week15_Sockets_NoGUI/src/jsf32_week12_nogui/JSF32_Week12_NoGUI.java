@@ -55,10 +55,10 @@ public class JSF32_Week12_NoGUI implements Observer
     {
         fractal.addObserver(this);
         connectedClients = new ArrayList<>();
-        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
-        BufferedReader reader = new BufferedReader(inputStreamReader);
-        System.out.println("Voor welk level moeten de edges gegenereerd worden?");
-        String input = reader.readLine();
+//        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+//        BufferedReader reader = new BufferedReader(inputStreamReader);
+//        System.out.println("Voor welk level moeten de edges gegenereerd worden?");
+//        String input = reader.readLine();
 
         try
         {
@@ -82,10 +82,10 @@ public class JSF32_Week12_NoGUI implements Observer
                             try
                             {
                                 Socket s = server.accept();
+                                LOG.log(Level.INFO, "New Client Connected: {0} ", s.getInetAddress());
                                 connectedClients.add(new ServerRunnable(s));
-                                LOG.log(Level.INFO, "New Client Connected: {0}", s.getInetAddress());
                             }
-                            catch (IOException ex)
+                            catch (IOException | ClassNotFoundException ex)
                             {
                                 Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
                             }
