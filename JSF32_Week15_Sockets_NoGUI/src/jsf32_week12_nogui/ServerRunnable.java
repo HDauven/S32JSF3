@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Jelle
  */
-public class ServerRunnable implements Runnable
+public class ServerRunnable
 {
 
     private ObjectInputStream in;
@@ -30,16 +30,6 @@ public class ServerRunnable implements Runnable
         app = new JSF32_Week12_NoGUI();
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
-    }
-    
-    public ServerRunnable()
-    {
-        
-    }
-
-    @Override
-    public void run()
-    {
         while (true)
         {
             try
@@ -51,7 +41,7 @@ public class ServerRunnable implements Runnable
                     Logger.getLogger(ServerRunnable.class.getName()).log(Level.INFO,
                             "Level to generate: {0}", level);
 
-                    app.edges.clear();
+                    //app.edges.clear();
                     app.generateEdges(level);
                 }
             }
@@ -60,6 +50,11 @@ public class ServerRunnable implements Runnable
                 Logger.getLogger(ServerRunnable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    public ServerRunnable()
+    {
+        
     }
 
     public void writeEdge(Edge edge)

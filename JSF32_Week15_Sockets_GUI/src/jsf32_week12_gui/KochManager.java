@@ -48,7 +48,7 @@ public class KochManager
     private int lineNumber = 1;
     private String level = "0";
     private TimeStamp ts = new TimeStamp();
-    private Client client;
+    public Client client;
 
     public KochManager(JSF32_Week12_GUI application) throws IOException
     {
@@ -276,6 +276,7 @@ public class KochManager
             public void run() {
                 while (true) {
                     if (client.getEdge() != null) {
+                            System.out.println("An edge has been received!");
                             Edge edge = client.getEdge();
                             edges.add(edge);
                             Platform.runLater(() -> {

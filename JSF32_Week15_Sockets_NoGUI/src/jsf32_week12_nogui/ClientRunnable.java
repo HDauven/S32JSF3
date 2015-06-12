@@ -47,7 +47,7 @@ public class ClientRunnable implements Runnable
     }
 
     /**
-     * Writes a level to to the server
+     * Writes a level to the server
      *
      * @param level
      */

@@ -24,6 +24,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -226,140 +227,162 @@ public class JSF32_Week12_GUI extends Application
 //        });
 //        grid.add(buttonFitFractal, 10, 6);
 //        buttonFitFractal.setDisable(true);
-        CheckBox cbTextNoBuffer = new CheckBox();
-        cbTextNoBuffer.setText("Textfile zonder buffer");
-        cbTextNoBuffer.setOnAction(new EventHandler<ActionEvent>()
-        {
+        
+          TextField tf = new TextField();
+          grid.add(tf, 0, 6);
+          
+          Button btnGenerate = new Button();
+          btnGenerate.setText("Generate level");
+          btnGenerate.setOnAction(new EventHandler<ActionEvent>()
+          {
+
             @Override
             public void handle(ActionEvent event)
             {
-                try
+                if (!tf.getText().isEmpty())
                 {
-                    if (cbTextNoBuffer.isSelected())
-                    {
-                        textNoBuffer = true;
-                        textWithBuffer = false;
-                        binaryNoBuffer = false;
-                        binaryWithBuffer = false;
-                        kochManager.drawEdges();
-                    } else
-                    {
-                        clearKochPanel();
-                        textNoBuffer = false;
-                    }
-                } catch (InterruptedException | BrokenBarrierException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    kochManager.client.sendLevel(Integer.valueOf(tf.getText()));
                 }
             }
+              
+          });
+          
+          grid.add(btnGenerate, 0, 8);
+        
+//        CheckBox cbTextNoBuffer = new CheckBox();
+//        cbTextNoBuffer.setText("Textfile zonder buffer");
+//        cbTextNoBuffer.setOnAction(new EventHandler<ActionEvent>()
+//        {
+//            @Override
+//            public void handle(ActionEvent event)
+//            {
+//                try
+//                {
+//                    if (cbTextNoBuffer.isSelected())
+//                    {
+//                        textNoBuffer = true;
+//                        textWithBuffer = false;
+//                        binaryNoBuffer = false;
+//                        binaryWithBuffer = false;
+//                        kochManager.drawEdges();
+//                    } else
+//                    {
+//                        clearKochPanel();
+//                        textNoBuffer = false;
+//                    }
+//                } catch (InterruptedException | BrokenBarrierException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (IOException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//        });
+//
+//        grid.add(cbTextNoBuffer, 0, 4);
+//
+//        CheckBox cbTextWithBuffer = new CheckBox();
+//        cbTextWithBuffer.setText("Textfile met buffer");
+//        cbTextWithBuffer.setOnAction(new EventHandler<ActionEvent>()
+//        {
+//            @Override
+//            public void handle(ActionEvent event)
+//            {
+//                try
+//                {
+//                    if (cbTextWithBuffer.isSelected())
+//                    {
+//                        textWithBuffer = true;
+//                        textNoBuffer = false;
+//                        binaryNoBuffer = false;
+//                        binaryWithBuffer = false;
+//                        kochManager.drawEdges();
+//                    } else
+//                    {
+//                        clearKochPanel();
+//                        textWithBuffer = false;
+//                    }
+//
+//                } catch (InterruptedException | BrokenBarrierException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (IOException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//        });
+//
+//        grid.add(cbTextWithBuffer, 2, 4);
+//
+//        CheckBox cbBinaryNoBuffer = new CheckBox();
+//        cbBinaryNoBuffer.setText("Binary zonder buffer");
+//        cbBinaryNoBuffer.setOnAction(new EventHandler<ActionEvent>()
+//        {
+//            @Override
+//            public void handle(ActionEvent event)
+//            {
+//                try
+//                {
+//                    if (cbBinaryNoBuffer.isSelected())
+//                    {
+//                        binaryNoBuffer = true;
+//                        binaryWithBuffer = false;
+//                        textNoBuffer = false;
+//                        textWithBuffer = false;
+//                        kochManager.drawEdges();
+//                    } else
+//                    {
+//                        clearKochPanel();
+//                        binaryNoBuffer = false;
+//                    }
+//                } catch (InterruptedException | BrokenBarrierException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (IOException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//        });
+//
+//        grid.add(cbBinaryNoBuffer, 4, 4);
+//
+//        CheckBox cbBinaryWithBuffer = new CheckBox();
+//        cbBinaryWithBuffer.setText("Binary met buffer");
+//        cbBinaryWithBuffer.setOnAction(new EventHandler<ActionEvent>()
+//        {
+//            @Override
+//            public void handle(ActionEvent event)
+//            {
+//                try
+//                {
+//                    if (cbBinaryWithBuffer.isSelected())
+//                    {
+//                        binaryWithBuffer = true;
+//                        binaryNoBuffer = false;
+//                        textNoBuffer = false;
+//                        textWithBuffer = false;
+//                        kochManager.drawEdges();
+//                    }
+//                    else
+//                    {
+//                        clearKochPanel();
+//                        binaryWithBuffer = false;
+//                    }
+//                } catch (InterruptedException | BrokenBarrierException | IOException ex)
+//                {
+//                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//        });
 
-        });
-
-        grid.add(cbTextNoBuffer, 0, 4);
-
-        CheckBox cbTextWithBuffer = new CheckBox();
-        cbTextWithBuffer.setText("Textfile met buffer");
-        cbTextWithBuffer.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                try
-                {
-                    if (cbTextWithBuffer.isSelected())
-                    {
-                        textWithBuffer = true;
-                        textNoBuffer = false;
-                        binaryNoBuffer = false;
-                        binaryWithBuffer = false;
-                        kochManager.drawEdges();
-                    } else
-                    {
-                        clearKochPanel();
-                        textWithBuffer = false;
-                    }
-
-                } catch (InterruptedException | BrokenBarrierException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-        });
-
-        grid.add(cbTextWithBuffer, 2, 4);
-
-        CheckBox cbBinaryNoBuffer = new CheckBox();
-        cbBinaryNoBuffer.setText("Binary zonder buffer");
-        cbBinaryNoBuffer.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                try
-                {
-                    if (cbBinaryNoBuffer.isSelected())
-                    {
-                        binaryNoBuffer = true;
-                        binaryWithBuffer = false;
-                        textNoBuffer = false;
-                        textWithBuffer = false;
-                        kochManager.drawEdges();
-                    } else
-                    {
-                        clearKochPanel();
-                        binaryNoBuffer = false;
-                    }
-                } catch (InterruptedException | BrokenBarrierException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-        });
-
-        grid.add(cbBinaryNoBuffer, 4, 4);
-
-        CheckBox cbBinaryWithBuffer = new CheckBox();
-        cbBinaryWithBuffer.setText("Binary met buffer");
-        cbBinaryWithBuffer.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle(ActionEvent event)
-            {
-                try
-                {
-                    if (cbBinaryWithBuffer.isSelected())
-                    {
-                        binaryWithBuffer = true;
-                        binaryNoBuffer = false;
-                        textNoBuffer = false;
-                        textWithBuffer = false;
-                        kochManager.drawEdges();
-                    }
-                    else
-                    {
-                        clearKochPanel();
-                        binaryWithBuffer = false;
-                    }
-                } catch (InterruptedException | BrokenBarrierException | IOException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-        });
-
-        grid.add(cbBinaryWithBuffer, 5, 4);
+        //grid.add(cbBinaryWithBuffer, 5, 4);
 
         // Label progress number of edges
         labelEdgesLeft = new Label("Nr edges: ");
