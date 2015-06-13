@@ -40,6 +40,7 @@ public class JSF32_Week12_NoGUI implements Observer
     private ArrayList<ServerRunnable> connectedClients;
     private ServerSocket server;
     private ServerRunnable serverRunnable = new ServerRunnable();
+    private static JSF32_Week12_NoGUI prog;
 
     /**
      * @param args the command line arguments
@@ -47,7 +48,7 @@ public class JSF32_Week12_NoGUI implements Observer
      */
     public static void main(String[] args) throws IOException
     {
-        JSF32_Week12_NoGUI prog = new JSF32_Week12_NoGUI();
+        prog = new JSF32_Week12_NoGUI();
         prog.start();
     }
 
@@ -83,7 +84,7 @@ public class JSF32_Week12_NoGUI implements Observer
                             {
                                 Socket s = server.accept();
                                 LOG.log(Level.INFO, "New Client Connected: {0} ", s.getInetAddress());
-                                connectedClients.add(new ServerRunnable(s));
+                                connectedClients.add(new ServerRunnable(s, prog));
                             }
                             catch (IOException | ClassNotFoundException ex)
                             {

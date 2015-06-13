@@ -24,10 +24,10 @@ public class ServerRunnable
     private Socket socket;
     private JSF32_Week12_NoGUI app;
 
-    public ServerRunnable(Socket s) throws IOException, ClassNotFoundException
+    public ServerRunnable(Socket s, JSF32_Week12_NoGUI application) throws IOException, ClassNotFoundException
     {
         this.socket = s;
-        app = new JSF32_Week12_NoGUI();
+        app = application;
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
         
