@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Jelle
  */
-public class ServerRunnable
+public class ServerRunnable implements Runnable
 {
 
     private ObjectInputStream in;
@@ -30,35 +30,8 @@ public class ServerRunnable
         app = application;
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
-        
-        int level = (int) in.readObject();
-        while (true)
-        {
-            try
-            {
-
-                if (level > 0)
-                {
-                    Logger.getLogger(ServerRunnable.class.getName()).log(Level.INFO,
-                            "Level to generate: {0}", level);
-
-                    //app.edges.clear();
-                    app.generateEdges(level);
-                }
-            }
-            catch (NumberFormatException ex)
-            {
-                Logger.getLogger(ServerRunnable.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
-    
-    public ServerRunnable()
-    {
-        
-    }
-
-    public void writeEdge(Edge edge)
+     public void writeEdge(Edge edge)
     {
         try
         {
@@ -70,4 +43,28 @@ public class ServerRunnable
         }
     }
 
+    @Override
+    public void run()
+    {
+        while (true)
+        {
+            try
+            {
+                int level = (int) in.readObject();
+                if (level > 0)
+                {
+                    Logger.getLogger(ServerRunnable.class.getName()).log(Level.INFO,
+                            "Level to generate: {0}", level);
+
+                    //app.edges.clear();
+                    app.generateEdges(level);
+                }
+            }
+            catch (NumberFormatException | IOException | ClassNotFoundException ex)
+            {
+                Logger.getLogger(ServerRunnable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }
+

@@ -39,7 +39,7 @@ public class JSF32_Week12_NoGUI implements Observer
     private TimeStamp ts = new TimeStamp();
     private ArrayList<ServerRunnable> connectedClients;
     private ServerSocket server;
-    private ServerRunnable serverRunnable = new ServerRunnable();
+    private ServerRunnable serverRunnable;
     private static JSF32_Week12_NoGUI prog;
 
     /**
@@ -71,36 +71,32 @@ public class JSF32_Week12_NoGUI implements Observer
             System.err.println("Failed to listen on port 4444.");
         }
 
-            try
+        try
+        {
+            LOG.log(Level.INFO, "Searching for clients...");
+            while (true)
             {
-                Thread thr = new Thread() {
-                    @Override
-                    public void run()
-                    {
-                        LOG.log(Level.INFO, "Searching for clients...");
-                        while (true)
-                        {
-                            try
-                            {
-                                Socket s = server.accept();
-                                LOG.log(Level.INFO, "New Client Connected: {0} ", s.getInetAddress());
-                                connectedClients.add(new ServerRunnable(s, prog));
-                            }
-                            catch (IOException | ClassNotFoundException ex)
-                            {
-                                Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                    }
-                };
-                
-                thr.setDaemon(false);
-                thr.start();
+                try
+                {
+                    Socket s = server.accept();
+                    LOG.log(Level.INFO, "New Client Connected: {0} ", s.getInetAddress());
+                    serverRunnable = new ServerRunnable(s, prog);
+                    connectedClients.add(serverRunnable);
+                    Thread thr = new Thread(serverRunnable);
+                    thr.setDaemon(false);
+                    thr.start();
+                }
+                catch (IOException | ClassNotFoundException ex)
+                {
+                    Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            catch (Exception ex)
-            {
-                Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void generateEdges(int level)
@@ -251,6 +247,7 @@ public class JSF32_Week12_NoGUI implements Observer
     @Override
     public synchronized void update(Observable o, Object arg)
     {
+        //System.out.println("Update method called!");
         Edge e = (Edge) arg;
         e.colorValue = e.color.toString();
         this.edges.add(e);

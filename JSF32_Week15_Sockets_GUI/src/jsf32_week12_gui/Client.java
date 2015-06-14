@@ -19,26 +19,16 @@ public class Client
 {
 
     public ClientRunnable server;
-    public static ArrayList<Edge> edges;
     private Socket socket;
+    private JSF32_Week12_GUI app;
 
-    public Client(String IP, int port) throws IOException
+    public Client(String IP, int port, JSF32_Week12_GUI application) throws IOException
     {
-        socket = new Socket(IP, port);
-        edges = new ArrayList<>();
-        server = new ClientRunnable(socket);
+        this.socket = new Socket(IP, port);
+        this.app = application;
+        server = new ClientRunnable(socket, app);
         Thread thr = new Thread(server);
         thr.start();
-    }
-
-    public Edge getEdge()
-    {
-        if (edges.size() > 0)
-        {
-            Iterator<Edge> it = edges.iterator();
-            return it.next();
-        }
-        return null;
     }
     
     public void sendLevel(int level)

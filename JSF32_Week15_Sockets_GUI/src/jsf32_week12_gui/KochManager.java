@@ -57,9 +57,7 @@ public class KochManager
         edges = new ArrayList<>();
         tsCalc = new TimeStamp();
         tsDraw = new TimeStamp();
-        client = new Client("localhost", 4444);
-        getEdges();
-        
+        client = new Client("localhost", 4444, application);     
     }
 
     public synchronized void increaseCount()
@@ -267,28 +265,5 @@ public class KochManager
                 application.setTextNrOfEdges(String.valueOf(counter));
             }
         }
-    }
-    
-        private void getEdges() {
-        Thread thr = new Thread() {
-            
-            @Override
-            public void run() {
-                while (true) {
-                    if (client.getEdge() != null) {
-                            System.out.println("An edge has been received!");
-                            Edge edge = client.getEdge();
-                            edges.add(edge);
-                            Platform.runLater(() -> {
-
-                                application.drawEdge(edge);
-                            });
-                            //client.removeEdge(edge);
-                    }
-                }
-            }
-        };
-        thr.setDaemon(true);
-        thr.start();
     }
 }

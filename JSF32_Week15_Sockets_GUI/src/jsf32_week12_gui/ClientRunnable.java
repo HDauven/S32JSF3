@@ -7,8 +7,10 @@ package jsf32_week12_gui;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import jsf32_week12_nogui.Edge;
 
 /**
@@ -21,10 +23,14 @@ public class ClientRunnable implements Runnable
     private Socket socket = null;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    private JSF32_Week12_GUI app;
+    private ArrayList<Edge> edges;
 
-    public ClientRunnable(Socket socket) throws IOException
+    public ClientRunnable(Socket socket, JSF32_Week12_GUI application) throws IOException
     {
         this.socket = socket;
+        this.app = application;
+        this.edges = new ArrayList<>();
         out = new ObjectOutputStream(this.socket.getOutputStream());
         out.flush();
         in = new ObjectInputStream(this.socket.getInputStream());
@@ -38,8 +44,8 @@ public class ClientRunnable implements Runnable
             try
             {
                 Edge edge = (Edge) in.readObject();
-                Client.edges.add(edge);
-                System.out.println(edge.toString());
+                edges.add(edge);
+                app.drawEdge(edge);
             }
             catch (IOException | ClassNotFoundException ex)
             {

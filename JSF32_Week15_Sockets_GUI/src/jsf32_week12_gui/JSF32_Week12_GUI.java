@@ -227,14 +227,13 @@ public class JSF32_Week12_GUI extends Application
 //        });
 //        grid.add(buttonFitFractal, 10, 6);
 //        buttonFitFractal.setDisable(true);
-        
-          TextField tf = new TextField();
-          grid.add(tf, 0, 6);
-          
-          Button btnGenerate = new Button();
-          btnGenerate.setText("Generate level");
-          btnGenerate.setOnAction(new EventHandler<ActionEvent>()
-          {
+        TextField tf = new TextField();
+        grid.add(tf, 0, 6);
+
+        Button btnGenerate = new Button();
+        btnGenerate.setText("Generate level");
+        btnGenerate.setOnAction(new EventHandler<ActionEvent>()
+        {
 
             @Override
             public void handle(ActionEvent event)
@@ -244,11 +243,11 @@ public class JSF32_Week12_GUI extends Application
                     kochManager.client.sendLevel(Integer.valueOf(tf.getText()));
                 }
             }
-              
-          });
-          
-          grid.add(btnGenerate, 0, 8);
-        
+
+        });
+
+        grid.add(btnGenerate, 0, 8);
+
 //        CheckBox cbTextNoBuffer = new CheckBox();
 //        cbTextNoBuffer.setText("Textfile zonder buffer");
 //        cbTextNoBuffer.setOnAction(new EventHandler<ActionEvent>()
@@ -381,9 +380,7 @@ public class JSF32_Week12_GUI extends Application
 //            }
 //
 //        });
-
         //grid.add(cbBinaryWithBuffer, 5, 4);
-
         // Label progress number of edges
         labelEdgesLeft = new Label("Nr edges: ");
         grid.add(labelEdgesLeft, 7, 8);
@@ -404,10 +401,12 @@ public class JSF32_Week12_GUI extends Application
                         try
                         {
                             kochPanelMouseClicked(event);
-                        } catch (InterruptedException | BrokenBarrierException ex)
+                        }
+                        catch (InterruptedException | BrokenBarrierException ex)
                         {
                             Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (IOException ex)
+                        }
+                        catch (IOException ex)
                         {
                             Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -434,10 +433,12 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     kochPanelMouseDragged(event);
-                } catch (InterruptedException | BrokenBarrierException ex)
+                }
+                catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
+                }
+                catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -488,10 +489,12 @@ public class JSF32_Week12_GUI extends Application
                 if (currentLevel <= 3)
                 {
                     gc.setLineWidth(2.0);
-                } else if (currentLevel <= 5)
+                }
+                else if (currentLevel <= 5)
                 {
                     gc.setLineWidth(1.5);
-                } else
+                }
+                else
                 {
                     gc.setLineWidth(1.0);
                 }
@@ -540,10 +543,8 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     kochManager.drawEdges();
-                } catch (InterruptedException | BrokenBarrierException ex)
-                {
-                    Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex)
+                }
+                catch (InterruptedException | BrokenBarrierException | IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -589,7 +590,8 @@ public class JSF32_Week12_GUI extends Application
             if (event.getButton() == MouseButton.PRIMARY)
             {
                 zoom *= 2.0;
-            } else if (event.getButton() == MouseButton.SECONDARY)
+            }
+            else if (event.getButton() == MouseButton.SECONDARY)
             {
                 zoom /= 2.0;
             }
