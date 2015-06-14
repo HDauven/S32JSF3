@@ -28,6 +28,7 @@ public class Client
         this.app = application;
         server = new ClientRunnable(socket, app);
         Thread thr = new Thread(server);
+        thr.setDaemon(false);
         thr.start();
     }
     

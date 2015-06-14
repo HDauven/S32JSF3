@@ -45,7 +45,16 @@ public class ClientRunnable implements Runnable
             {
                 Edge edge = (Edge) in.readObject();
                 edges.add(edge);
-                app.drawEdge(edge);
+                Platform.runLater(new Runnable()
+                {
+
+                    @Override
+                    public void run()
+                    {
+                        app.drawEdge(edge);
+                    }
+
+                });
             }
             catch (IOException | ClassNotFoundException ex)
             {
@@ -55,7 +64,7 @@ public class ClientRunnable implements Runnable
     }
 
     /**
-     * Writes a level to to the server
+     * Writes a level to the server
      *
      * @param level
      */

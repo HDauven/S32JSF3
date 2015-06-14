@@ -448,7 +448,7 @@ public class JSF32_Week12_GUI extends Application
         // Create Koch manager and set initial level
         resetZoom();
         kochManager = new KochManager(this);
-        kochManager.changeLevel(currentLevel);
+        clearKochPanel();
 
         // Create the scene and add the grid pane
         Group root = new Group();
@@ -471,11 +471,11 @@ public class JSF32_Week12_GUI extends Application
 
     public void drawEdge(final Edge e)
     {
-        Platform.runLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
+//        Platform.runLater(new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
                 // Graphics
                 GraphicsContext gc = kochPanel.getGraphicsContext2D();
 
@@ -501,9 +501,9 @@ public class JSF32_Week12_GUI extends Application
 
                 // Draw line
                 gc.strokeLine(e1.X1, e1.Y1, e1.X2, e1.Y2);
-            }
-
-        });
+//            }
+//
+//        });
 
     }
 

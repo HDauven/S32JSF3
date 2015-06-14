@@ -56,7 +56,6 @@ public class ServerRunnable implements Runnable
                     Logger.getLogger(ServerRunnable.class.getName()).log(Level.INFO,
                             "Level to generate: {0}", level);
 
-                    //app.edges.clear();
                     app.generateEdges(level);
                 }
             }
