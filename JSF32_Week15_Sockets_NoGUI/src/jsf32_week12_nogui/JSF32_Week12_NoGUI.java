@@ -37,9 +37,10 @@ public class JSF32_Week12_NoGUI implements Observer
     public ArrayList<Edge> edges = new ArrayList<>();
     private Integer level = 0;
     private TimeStamp ts = new TimeStamp();
-    private ArrayList<Client> connectedClients;
+    private ArrayList<ServerRunnable> connectedClients;
     private ServerSocket server;
     private ServerRunnable serverRunnable = new ServerRunnable();
+    private static JSF32_Week12_NoGUI prog;
 
     /**
      * @param args the command line arguments
@@ -47,7 +48,7 @@ public class JSF32_Week12_NoGUI implements Observer
      */
     public static void main(String[] args) throws IOException
     {
-        JSF32_Week12_NoGUI prog = new JSF32_Week12_NoGUI();
+        prog = new JSF32_Week12_NoGUI();
         prog.start();
     }
 
@@ -55,11 +56,10 @@ public class JSF32_Week12_NoGUI implements Observer
     {
         fractal.addObserver(this);
         connectedClients = new ArrayList<>();
-        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
-        BufferedReader reader = new BufferedReader(inputStreamReader);
-        System.out.println("Voor welk level moeten de edges gegenereerd worden?");
-        String input = reader.readLine();
-        boolean listening = true;
+//        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+//        BufferedReader reader = new BufferedReader(inputStreamReader);
+//        System.out.println("Voor welk level moeten de edges gegenereerd worden?");
+//        String input = reader.readLine();
 
         try
         {
@@ -71,22 +71,36 @@ public class JSF32_Week12_NoGUI implements Observer
             System.err.println("Failed to listen on port 4444.");
         }
 
-        while (listening)
-        {
             try
             {
-                Socket s = server.accept();
-                connectedClients.add(new Client("localhost", 4444));
-                Thread thr = new Thread(new ClientRunnable(s));
+                Thread thr = new Thread() {
+                    @Override
+                    public void run()
+                    {
+                        LOG.log(Level.INFO, "Searching for clients...");
+                        while (true)
+                        {
+                            try
+                            {
+                                Socket s = server.accept();
+                                LOG.log(Level.INFO, "New Client Connected: {0} ", s.getInetAddress());
+                                connectedClients.add(new ServerRunnable(s, prog));
+                            }
+                            catch (IOException | ClassNotFoundException ex)
+                            {
+                                Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                };
+                
                 thr.setDaemon(false);
-                LOG.log(Level.INFO, "New Client Connected: {0}", server.getInetAddress());
                 thr.start();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
     }
 
     public void generateEdges(int level)
@@ -240,7 +254,7 @@ public class JSF32_Week12_NoGUI implements Observer
         Edge e = (Edge) arg;
         e.colorValue = e.color.toString();
         this.edges.add(e);
-        for (Client client : connectedClients)
+        for (ServerRunnable client : connectedClients)
         {
             serverRunnable.writeEdge(e);
         }

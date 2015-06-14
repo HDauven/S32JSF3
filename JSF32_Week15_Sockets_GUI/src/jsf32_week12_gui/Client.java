@@ -18,7 +18,7 @@ import jsf32_week12_nogui.Edge;
 public class Client
 {
 
-    private ClientRunnable server;
+    public ClientRunnable server;
     public static ArrayList<Edge> edges;
     private Socket socket;
 
@@ -27,6 +27,8 @@ public class Client
         socket = new Socket(IP, port);
         edges = new ArrayList<>();
         server = new ClientRunnable(socket);
+        Thread thr = new Thread(server);
+        thr.start();
     }
 
     public Edge getEdge()
@@ -37,6 +39,11 @@ public class Client
             return it.next();
         }
         return null;
+    }
+    
+    public void sendLevel(int level)
+    {
+        server.writeLevel(level);
     }
 
 }

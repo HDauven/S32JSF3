@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Jelle
  */
-public class ServerRunnable implements Runnable
+public class ServerRunnable
 {
 
     private ObjectInputStream in;
@@ -24,42 +24,38 @@ public class ServerRunnable implements Runnable
     private Socket socket;
     private JSF32_Week12_NoGUI app;
 
-    public ServerRunnable(Socket s) throws IOException
+    public ServerRunnable(Socket s, JSF32_Week12_NoGUI application) throws IOException, ClassNotFoundException
     {
         this.socket = s;
-        app = new JSF32_Week12_NoGUI();
+        app = application;
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
-    }
-    
-    public ServerRunnable()
-    {
         
-    }
-
-    @Override
-    public void run()
-    {
+        int level = (int) in.readObject();
         while (true)
         {
             try
             {
-                int level = (int) in.readObject();
 
                 if (level > 0)
                 {
                     Logger.getLogger(ServerRunnable.class.getName()).log(Level.INFO,
                             "Level to generate: {0}", level);
 
-                    app.edges.clear();
+                    //app.edges.clear();
                     app.generateEdges(level);
                 }
             }
-            catch (IOException | ClassNotFoundException | NumberFormatException ex)
+            catch (NumberFormatException ex)
             {
                 Logger.getLogger(ServerRunnable.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    public ServerRunnable()
+    {
+        
     }
 
     public void writeEdge(Edge edge)
