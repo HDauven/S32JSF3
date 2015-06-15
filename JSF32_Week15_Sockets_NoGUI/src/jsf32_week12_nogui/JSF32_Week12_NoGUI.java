@@ -37,10 +37,11 @@ public class JSF32_Week12_NoGUI implements Observer
     public ArrayList<Edge> edges = new ArrayList<>();
     private Integer level = 0;
     private TimeStamp ts = new TimeStamp();
-    private ArrayList<ServerRunnable> connectedClients;
+    public ArrayList<ServerRunnable> connectedClients;
     private ServerSocket server;
     private ServerRunnable serverRunnable;
     private static JSF32_Week12_NoGUI prog;
+    public String IPToSend = "";
 
     /**
      * @param args the command line arguments
@@ -65,8 +66,7 @@ public class JSF32_Week12_NoGUI implements Observer
         {
             server = new ServerSocket(4444);
             LOG.log(Level.INFO, "Server is listening on port: {0}", server.getLocalPort());
-        }
-        catch (IOException ex)
+        } catch (IOException ex)
         {
             System.err.println("Failed to listen on port 4444.");
         }
@@ -85,15 +85,13 @@ public class JSF32_Week12_NoGUI implements Observer
                     Thread thr = new Thread(serverRunnable);
                     thr.setDaemon(false);
                     thr.start();
-                }
-                catch (IOException | ClassNotFoundException ex)
+                } catch (IOException | ClassNotFoundException ex)
                 {
                     Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             Logger.getLogger(JSF32_Week12_NoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -113,8 +111,7 @@ public class JSF32_Week12_NoGUI implements Observer
             fractal.generateBottomEdge();
             fractal.generateLeftEdge();
             fractal.generateRightEdge();
-        }
-        catch (NumberFormatException exc)
+        } catch (NumberFormatException exc)
         {
             System.err.println("Ongeldig level!");
         }
@@ -143,12 +140,10 @@ public class JSF32_Week12_NoGUI implements Observer
             ts.setEnd("End textNoBuffer");
 
             System.out.println("De edges zijn opgeslagen in een text file zonder buffer! " + ts.toString());
-        }
-        catch (IOException ex)
+        } catch (IOException ex)
         {
             System.err.println(ex.getMessage());
-        }
-        finally
+        } finally
         {
 
         }
@@ -180,8 +175,7 @@ public class JSF32_Week12_NoGUI implements Observer
             ts.setEnd("End textWithBuffer");
 
             System.out.println("De edges zijn opgeslagen in een text file met buffer! " + ts.toString());
-        }
-        catch (IOException ex)
+        } catch (IOException ex)
         {
             System.err.println(ex.getMessage());
         }
@@ -208,8 +202,7 @@ public class JSF32_Week12_NoGUI implements Observer
             ts.setEnd("End binaryNoBuffer");
 
             System.out.println("De edges zijn opgeslagen in een binary file zonder buffer! " + ts.toString());
-        }
-        catch (IOException ioe)
+        } catch (IOException ioe)
         {
             System.err.println(ioe.getMessage());
         }
@@ -237,8 +230,7 @@ public class JSF32_Week12_NoGUI implements Observer
             ts.setEnd("End binaryWithBuffer");
 
             System.out.println("De edges zijn opgeslagen in een binary file met buffer! " + ts.toString());
-        }
-        catch (IOException ioe)
+        } catch (IOException ioe)
         {
             System.err.println(ioe.getMessage());
         }
@@ -253,7 +245,10 @@ public class JSF32_Week12_NoGUI implements Observer
         this.edges.add(e);
         for (ServerRunnable client : connectedClients)
         {
-            serverRunnable.writeEdge(e);
+            if (client.socket.getInetAddress().toString().equals(IPToSend))
+            {
+                client.writeEdge(e);
+            }
         }
     }
 }
