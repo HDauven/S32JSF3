@@ -240,6 +240,7 @@ public class JSF32_Week12_GUI extends Application
             {
                 if (!tf.getText().isEmpty())
                 {
+                    clearKochPanel();
                     kochManager.client.sendLevel(Integer.valueOf(tf.getText()));
                 }
             }
@@ -471,11 +472,12 @@ public class JSF32_Week12_GUI extends Application
 
     public void drawEdge(final Edge e)
     {
-//        Platform.runLater(new Runnable()
-//        {
-//            @Override
-//            public void run()
-//            {
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                System.out.println("drawEdge called! *****");
                 // Graphics
                 GraphicsContext gc = kochPanel.getGraphicsContext2D();
 
@@ -501,9 +503,9 @@ public class JSF32_Week12_GUI extends Application
 
                 // Draw line
                 gc.strokeLine(e1.X1, e1.Y1, e1.X2, e1.Y2);
-//            }
-//
-//        });
+            }
+
+        });
 
     }
 
