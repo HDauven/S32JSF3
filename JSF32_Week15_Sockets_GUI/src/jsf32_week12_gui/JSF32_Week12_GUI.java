@@ -240,8 +240,24 @@ public class JSF32_Week12_GUI extends Application
             {
                 if (!tf.getText().isEmpty())
                 {
-                    clearKochPanel();
-                    kochManager.client.sendLevel(Integer.valueOf(tf.getText()));
+                    int level = 0;
+                    try
+                    {
+                        level = Integer.parseInt(tf.getText());
+                        if (level > 0 && level < 12)
+                        {
+                            clearKochPanel();
+                            kochManager.client.sendLevel(level);
+                        }
+                        else
+                        {
+                            throw new NumberFormatException();
+                        }
+
+                    } catch (NumberFormatException ex)
+                    {
+                        System.err.println("Ongeldig level!");
+                    }
                 }
             }
 
@@ -402,12 +418,10 @@ public class JSF32_Week12_GUI extends Application
                         try
                         {
                             kochPanelMouseClicked(event);
-                        }
-                        catch (InterruptedException | BrokenBarrierException ex)
+                        } catch (InterruptedException | BrokenBarrierException ex)
                         {
                             Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        catch (IOException ex)
+                        } catch (IOException ex)
                         {
                             Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -434,12 +448,10 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     kochPanelMouseDragged(event);
-                }
-                catch (InterruptedException | BrokenBarrierException ex)
+                } catch (InterruptedException | BrokenBarrierException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (IOException ex)
+                } catch (IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -477,32 +489,29 @@ public class JSF32_Week12_GUI extends Application
 //            @Override
 //            public void run()
 //            {
-                System.out.println("drawEdge called! *****");
-                // Graphics
-                GraphicsContext gc = kochPanel.getGraphicsContext2D();
+        // Graphics
+        GraphicsContext gc = kochPanel.getGraphicsContext2D();
 
-                // Adjust edge for zoom and drag
-                Edge e1 = edgeAfterZoomAndDrag(e);
+        // Adjust edge for zoom and drag
+        Edge e1 = edgeAfterZoomAndDrag(e);
 
-                // Set line color
-                gc.setStroke(e1.color);
+        // Set line color
+        gc.setStroke(e1.color);
 
-                // Set line width depending on level
-                if (currentLevel <= 3)
-                {
-                    gc.setLineWidth(2.0);
-                }
-                else if (currentLevel <= 5)
-                {
-                    gc.setLineWidth(1.5);
-                }
-                else
-                {
-                    gc.setLineWidth(1.0);
-                }
+        // Set line width depending on level
+        if (currentLevel <= 3)
+        {
+            gc.setLineWidth(2.0);
+        } else if (currentLevel <= 5)
+        {
+            gc.setLineWidth(1.5);
+        } else
+        {
+            gc.setLineWidth(1.0);
+        }
 
-                // Draw line
-                gc.strokeLine(e1.X1, e1.Y1, e1.X2, e1.Y2);
+        // Draw line
+        gc.strokeLine(e1.X1, e1.Y1, e1.X2, e1.Y2);
 //            }
 //
 //        });
@@ -545,8 +554,7 @@ public class JSF32_Week12_GUI extends Application
                 try
                 {
                     kochManager.drawEdges();
-                }
-                catch (InterruptedException | BrokenBarrierException | IOException ex)
+                } catch (InterruptedException | BrokenBarrierException | IOException ex)
                 {
                     Logger.getLogger(JSF32_Week12_GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -592,8 +600,7 @@ public class JSF32_Week12_GUI extends Application
             if (event.getButton() == MouseButton.PRIMARY)
             {
                 zoom *= 2.0;
-            }
-            else if (event.getButton() == MouseButton.SECONDARY)
+            } else if (event.getButton() == MouseButton.SECONDARY)
             {
                 zoom /= 2.0;
             }
