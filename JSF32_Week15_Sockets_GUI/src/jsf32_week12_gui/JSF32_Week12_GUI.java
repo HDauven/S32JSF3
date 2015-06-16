@@ -79,31 +79,6 @@ public class JSF32_Week12_GUI extends Application
     private final int kpWidth = 500;
     private final int kpHeight = 500;
 
-    private boolean textNoBuffer = false;
-    private boolean textWithBuffer = false;
-    private boolean binaryNoBuffer = false;
-    private boolean binaryWithBuffer = false;
-
-    public boolean getTextNoBuffer()
-    {
-        return this.textNoBuffer;
-    }
-
-    public boolean getTextWithBuffer()
-    {
-        return this.textWithBuffer;
-    }
-
-    public boolean getBinaryNoBuffer()
-    {
-        return this.binaryNoBuffer;
-    }
-
-    public boolean getBinaryWithBuffer()
-    {
-        return this.binaryWithBuffer;
-    }
-
     @Override
     public void start(Stage primaryStage) throws InterruptedException, ExecutionException, BrokenBarrierException, IOException
     {
