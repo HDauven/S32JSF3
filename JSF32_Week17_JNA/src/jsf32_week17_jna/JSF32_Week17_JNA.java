@@ -42,24 +42,15 @@ public class JSF32_Week17_JNA
         
         System.out.println(ts.toString());
         System.out.println(ts2.toString());
-
+        
         //OPDRACHT 2
         LongByReference lpFreeBytesAvailable = new LongByReference();
         LongByReference lpTotalNumberOfByes = new LongByReference();
         LongByReference lpTotalNumberOfFreeBytes = new LongByReference();
-        boolean result = ILibrary.INSTANCE.GetDiskFreeSpaceExA("C:\\", lpFreeBytesAvailable, lpTotalNumberOfByes, lpTotalNumberOfFreeBytes);
+        
+        ILibrary.INSTANCE.GetDiskFreeSpaceExA("C:\\", lpFreeBytesAvailable, lpTotalNumberOfByes, lpTotalNumberOfFreeBytes);
         System.out.println("Free bytes in MB " + (lpFreeBytesAvailable.getValue() / 1024) / 1024);
         System.out.println("Total number of bytes in MB " + (lpTotalNumberOfByes.getValue() / 1024) / 1024) ;
         System.out.println("Total number of free bytes in MB " + (lpTotalNumberOfFreeBytes.getValue() / 1024) / 1024);
-       
-        
-//        System.out.println("Year is " + time.wYear);
-//        System.out.println("Month is " + time.wMonth);
-//        System.out.println("Day of Week is " + time.wDayOfWeek);
-//        System.out.println("Day is " + time.wDay);
-//        System.out.println("Hour is " + time.wHour);
-//        System.out.println("Minute is " + time.wMinute);
-//        System.out.println("Second is " + time.wSecond);
-//        System.out.println("Milliseconds are " + time.wMilliseconds);
     }
 }
