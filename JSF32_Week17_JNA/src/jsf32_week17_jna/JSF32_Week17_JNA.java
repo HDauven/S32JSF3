@@ -17,10 +17,40 @@ public class JSF32_Week17_JNA
      */
     public static void main(String[] args)
     {
-        int pid = ILibrary.INSTANCE.GetCurrentProcessId();
-        System.out.println(pid);
-        int version = ILibrary.INSTANCE.GetVersion();
-        System.out.println(version);
-    }
+        SYSTEMTIME time = new SYSTEMTIME();
+        
+        //OPDRACHT 1
+        TimeStamp ts = new TimeStamp();
+        TimeStamp ts2 = new TimeStamp();
+        ts.init();
+        ts2.init();
+        ts.setBegin("Start GetLocalTime()");
+        for (int i = 0; i < 1000000; i++)
+        {
+           ILibrary.INSTANCE.GetLocalTime(time); 
+        }
+        ts.setEnd("End GetLocalTime()");
+        
+        ts2.setBegin("Start System.nanoTime()");
+        for (int i = 0; i < 1000000; i++)
+        {
+            System.nanoTime();
+        }
+        ts2.setEnd("End System.nanoTime()");
+        
+        System.out.println(ts.toString());
+        System.out.println(ts2.toString());
 
+        //OPDRACHT 2
+        
+        
+//        System.out.println("Year is " + time.wYear);
+//        System.out.println("Month is " + time.wMonth);
+//        System.out.println("Day of Week is " + time.wDayOfWeek);
+//        System.out.println("Day is " + time.wDay);
+//        System.out.println("Hour is " + time.wHour);
+//        System.out.println("Minute is " + time.wMinute);
+//        System.out.println("Second is " + time.wSecond);
+//        System.out.println("Milliseconds are " + time.wMilliseconds);
+    }
 }

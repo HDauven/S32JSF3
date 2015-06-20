@@ -18,6 +18,5 @@ public interface ILibrary extends Library
     ILibrary INSTANCE = (ILibrary) Native.loadLibrary("kernel32", ILibrary.class);
 
     int GetCurrentProcessId();
-
-    int GetVersion();
+    void GetLocalTime(SYSTEMTIME result);
 }
