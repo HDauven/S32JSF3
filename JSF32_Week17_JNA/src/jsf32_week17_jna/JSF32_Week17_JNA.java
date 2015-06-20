@@ -5,6 +5,8 @@
  */
 package jsf32_week17_jna;
 
+import com.sun.jna.ptr.LongByReference;
+
 /**
  *
  * @author Jelle
@@ -42,7 +44,14 @@ public class JSF32_Week17_JNA
         System.out.println(ts2.toString());
 
         //OPDRACHT 2
-        
+        LongByReference lpFreeBytesAvailable = new LongByReference();
+        LongByReference lpTotalNumberOfByes = new LongByReference();
+        LongByReference lpTotalNumberOfFreeBytes = new LongByReference();
+        boolean result = ILibrary.INSTANCE.GetDiskFreeSpaceExA("C:\\", lpFreeBytesAvailable, lpTotalNumberOfByes, lpTotalNumberOfFreeBytes);
+        System.out.println("Free bytes in MB " + (lpFreeBytesAvailable.getValue() / 1024) / 1024);
+        System.out.println("Total number of bytes in MB " + (lpTotalNumberOfByes.getValue() / 1024) / 1024) ;
+        System.out.println("Total number of free bytes in MB " + (lpTotalNumberOfFreeBytes.getValue() / 1024) / 1024);
+       
         
 //        System.out.println("Year is " + time.wYear);
 //        System.out.println("Month is " + time.wMonth);

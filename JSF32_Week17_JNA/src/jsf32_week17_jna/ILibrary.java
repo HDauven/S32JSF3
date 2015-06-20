@@ -7,6 +7,7 @@ package jsf32_week17_jna;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+import com.sun.jna.ptr.LongByReference;
 
 /**
  *
@@ -19,4 +20,5 @@ public interface ILibrary extends Library
 
     int GetCurrentProcessId();
     void GetLocalTime(SYSTEMTIME result);
+    boolean GetDiskFreeSpaceExA(String lpDirectoryName, LongByReference lpFreeBytesAvailable, LongByReference lpTotalNumberOfBytes, LongByReference lpTotalNumberOfFreeBytes);
 }
