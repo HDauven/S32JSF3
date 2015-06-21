@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.scene.paint.Color;
 import jsf32_week12_nogui.Edge;
 
 /**
@@ -44,6 +45,7 @@ public class ClientRunnable implements Runnable
             try
             {
                 Edge edge = (Edge) in.readObject();
+                edge.color = Color.valueOf(edge.colorValue);
                 edges.add(edge);
                 Platform.runLater(new Runnable()
                 {

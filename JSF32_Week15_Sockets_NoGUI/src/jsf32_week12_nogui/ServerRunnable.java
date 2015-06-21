@@ -21,7 +21,7 @@ public class ServerRunnable implements Runnable
 
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    private Socket socket;
+    public Socket socket;
     private JSF32_Week12_NoGUI app;
 
     public ServerRunnable(Socket s, JSF32_Week12_NoGUI application) throws IOException, ClassNotFoundException
@@ -53,9 +53,8 @@ public class ServerRunnable implements Runnable
                 int level = (int) in.readObject();
                 if (level > 0)
                 {
-                    Logger.getLogger(ServerRunnable.class.getName()).log(Level.INFO,
-                            "Level to generate: {0}", level);
-
+                    Logger.getLogger(ServerRunnable.class.getName()).log(Level.INFO, "Level to generate: {0}", level);
+                    app.IPToSend = (String) socket.getInetAddress().toString();
                     app.generateEdges(level);
                 }
             }
